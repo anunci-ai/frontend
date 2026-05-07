@@ -15,6 +15,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import logo from "../assets/logo.png"
 import { FeedbackWidget } from "./feedback-widget"
 import { ModeToggle } from "./mode-toogle"
+import { ProfileButton } from "./profile-button"
 
 // type SidebarClientProps = {
 //   activeId?: string
@@ -192,8 +193,10 @@ export function Sidebar() {
               isCollapsedView ? "justify-center" : "justify-between gap-2"
             )}
           >
+            <ProfileButton isSidebarCollapsed={isCollapsedView} />
+
             {!isCollapsedView && (
-              <div className="flex items-center gap-1">
+              <div className="flex items-center justify-between gap-1">
                 <ModeToggle />
                 <FeedbackWidget />
               </div>
