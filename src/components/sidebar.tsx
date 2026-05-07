@@ -14,6 +14,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import logo from "../assets/logo.png"
 import { FeedbackWidget } from "./feedback-widget"
+import { ModeToggle } from "./mode-toogle"
 
 // type SidebarClientProps = {
 //   activeId?: string
@@ -193,6 +194,7 @@ export function Sidebar() {
           >
             {!isCollapsedView && (
               <div className="flex items-center gap-1">
+                <ModeToggle />
                 <FeedbackWidget />
               </div>
             )}
