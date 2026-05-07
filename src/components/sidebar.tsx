@@ -13,6 +13,7 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import logo from "../assets/logo.png"
+import { FeedbackWidget } from "./feedback-widget"
 
 // type SidebarClientProps = {
 //   activeId?: string
@@ -191,7 +192,9 @@ export function Sidebar() {
             )}
           >
             {!isCollapsedView && (
-              <div className="flex items-center gap-1"></div>
+              <div className="flex items-center gap-1">
+                <FeedbackWidget />
+              </div>
             )}
           </div>
         </div>
