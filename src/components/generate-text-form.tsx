@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { ArrowRight02Icon } from "@hugeicons/core-free-icons"
+import mercadoLibreIcon from "@/assets/mercado-libre.svg"
 
 export function GenerateTextForm() {
   return (
@@ -36,9 +37,14 @@ export function GenerateTextForm() {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="light">Mercado Livre</SelectItem>
-                <SelectItem value="dark">Shoppee</SelectItem>
-                <SelectItem value="system">Amazon</SelectItem>
+                <SelectItem value="MERCADO_LIVRE">
+                  <img
+                    src={mercadoLibreIcon}
+                    alt="Mercado Libre"
+                    className="w-6"
+                  />{" "}
+                  Mercado Livre
+                </SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
