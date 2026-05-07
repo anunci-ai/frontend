@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { CollapsedTooltip } from "./collapsed-tooltip"
 import {
   Cancel01Icon,
+  Clock01Icon,
+  Home04Icon,
   PanelLeftIcon,
   PlusSignIcon,
   Store01Icon,
@@ -138,13 +140,29 @@ export function Sidebar() {
           <>
             <nav
               aria-label="Histórico de anúncios"
-              className="flex min-h-0 min-w-0 flex-1 flex-col"
+              className="flex min-h-0 min-w-0 flex-1 flex-col gap-4"
             >
               <Button
                 asChild
                 variant="ghost"
                 aria-label="Novo Anúncio"
                 className="w-full gap-2"
+                size="lg"
+              >
+                <a
+                  href="/"
+                  className="flex flex-row items-center justify-start gap-3"
+                >
+                  <HugeiconsIcon icon={Home04Icon} />
+                  <span className="">Início</span>
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="ghost"
+                aria-label="Novo Anúncio"
+                className="w-full gap-2"
+                size="lg"
               >
                 <a
                   href="/"
@@ -152,6 +170,21 @@ export function Sidebar() {
                 >
                   <HugeiconsIcon icon={Store01Icon} />
                   <span className="">Anúncios</span>
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="ghost"
+                aria-label="Novo Anúncio"
+                className="w-full gap-2"
+                size="lg"
+              >
+                <a
+                  href="/"
+                  className="flex flex-row items-center justify-start gap-3"
+                >
+                  <HugeiconsIcon icon={Clock01Icon} />
+                  <span className="">Histórico</span>
                 </a>
               </Button>
             </nav>
