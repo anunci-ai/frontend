@@ -9,6 +9,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { CreditCard, LogOut, Settings } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { CollapsedTooltip } from "./collapsed-tooltip"
+import { Button } from "./ui/button"
+import { useAuth } from "@/hooks/use-auth"
 
 function getInitials(name?: string) {
   if (!name) return "?"
@@ -26,11 +28,7 @@ interface ProfileButtonProps {
 }
 
 export function ProfileButton({ isSidebarCollapsed }: ProfileButtonProps) {
-  const user = {
-    name: "Alvaro Sena",
-    avatarUrl: "https://github.com/alvarosena.png",
-    email: "alvaro@exemplo.com",
-  }
+  const { signInOut, user } = useAuth()
 
   return (
     <DropdownMenu>
@@ -79,10 +77,14 @@ export function ProfileButton({ isSidebarCollapsed }: ProfileButtonProps) {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" asChild>
-          <a href="/api/auth/sign-out">
+          <Button
+            variant="ghost"
+            className="flex w-full items-center justify-start"
+            onClick={signInOut}
+          >
             <LogOut />
             Sair
-          </a>
+          </Button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
