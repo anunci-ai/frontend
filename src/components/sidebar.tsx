@@ -1,23 +1,22 @@
+import logo from "../assets/logo.png"
 import { useEffect, useState } from "react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { CollapsedTooltip } from "./collapsed-tooltip"
-import {
-  Cancel01Icon,
-  Clock01Icon,
-  Home04Icon,
-  PanelLeftIcon,
-  PlusSignIcon,
-  Store01Icon,
-  ZapIcon,
-} from "@hugeicons/core-free-icons"
-import { HugeiconsIcon } from "@hugeicons/react"
-import logo from "../assets/logo.png"
 import { FeedbackWidget } from "./feedback-widget"
 import { ModeToggle } from "./mode-toogle"
 import { ProfileButton } from "./profile-button"
+import {
+  ClockIcon,
+  HomeIcon,
+  PanelLeftIcon,
+  PlusIcon,
+  StoreIcon,
+  X,
+  ZapIcon,
+} from "lucide-react"
 
 // type SidebarClientProps = {
 //   activeId?: string
@@ -56,7 +55,7 @@ export function Sidebar() {
           mobileOpen ? "pointer-events-none opacity-0" : "opacity-100"
         )}
       >
-        <HugeiconsIcon icon={PanelLeftIcon} />
+        <PanelLeftIcon />
       </Button>
 
       <aside
@@ -91,7 +90,7 @@ export function Sidebar() {
             onClick={() => setMobileOpen(false)}
             className="lg:hidden"
           >
-            <HugeiconsIcon icon={Cancel01Icon} />
+            <X />
           </Button>
 
           <CollapsedTooltip
@@ -107,7 +106,7 @@ export function Sidebar() {
               }
               className="hidden lg:inline-flex"
             >
-              <HugeiconsIcon icon={PanelLeftIcon} />
+              <PanelLeftIcon />
             </Button>
           </CollapsedTooltip>
         </div>
@@ -127,7 +126,7 @@ export function Sidebar() {
               {!isCollapsedView ? (
                 <span className="w-full text-center">Novo Anúncio</span>
               ) : (
-                <HugeiconsIcon icon={PlusSignIcon} />
+                <PlusIcon />
               )}
             </a>
           </Button>
@@ -153,7 +152,7 @@ export function Sidebar() {
                   href="/"
                   className="flex flex-row items-center justify-start gap-3"
                 >
-                  <HugeiconsIcon icon={Home04Icon} />
+                  <HomeIcon />
                   <span className="">Início</span>
                 </a>
               </Button>
@@ -168,7 +167,7 @@ export function Sidebar() {
                   href="/"
                   className="flex flex-row items-center justify-start gap-3"
                 >
-                  <HugeiconsIcon icon={Store01Icon} />
+                  <StoreIcon />
                   <span className="">Anúncios</span>
                 </a>
               </Button>
@@ -183,7 +182,7 @@ export function Sidebar() {
                   href="/"
                   className="flex flex-row items-center justify-start gap-3"
                 >
-                  <HugeiconsIcon icon={Clock01Icon} />
+                  <ClockIcon />
                   <span className="">Histórico</span>
                 </a>
               </Button>
@@ -214,7 +213,7 @@ export function Sidebar() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <HugeiconsIcon icon={ZapIcon} />
+                <ZapIcon />
                 {!isCollapsedView && <span>Upgrade</span>}
               </a>
             </Button>

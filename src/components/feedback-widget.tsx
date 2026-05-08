@@ -14,8 +14,7 @@ import { z } from "zod"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { HelpCircleIcon, Loading03Icon } from "@hugeicons/core-free-icons"
+import { HelpCircleIcon, LoaderCircleIcon } from "lucide-react"
 // import { toast } from "sonner"
 
 const feedbackFormSchema = z.object({
@@ -51,7 +50,7 @@ export function FeedbackWidget() {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="ghost" size="icon" aria-label="Ajuda">
-          <HugeiconsIcon icon={HelpCircleIcon} />
+          <HelpCircleIcon />
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -108,7 +107,7 @@ export function FeedbackWidget() {
               size={isLoading ? "icon" : "default"}
             >
               {isLoading ? (
-                <HugeiconsIcon icon={Loading03Icon} className="animate-spin" />
+                <LoaderCircleIcon className="animate-spin" />
               ) : (
                 "Enviar"
               )}

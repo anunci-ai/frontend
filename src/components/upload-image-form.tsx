@@ -7,7 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card"
-import { MagicWand05Icon, UploadCircle01Icon } from "@hugeicons/core-free-icons"
+import { MagicWand05Icon } from "@hugeicons/core-free-icons"
+import { UploadIcon } from "lucide-react"
 
 export function UploadImageForm() {
   return (
@@ -21,7 +22,7 @@ export function UploadImageForm() {
       <CardContent>
         <form className="flex flex-col gap-4">
           <div className="flex h-32 w-full flex-col items-center justify-center gap-3 rounded-md border border-dashed border-zinc-300 p-6 text-center dark:border-zinc-700">
-            <HugeiconsIcon icon={UploadCircle01Icon} />
+            <UploadIcon />
             <p className="text-xs text-muted-foreground">
               Arraste a foto aqui ou <br />
               <span className="underline">clique aqui para selecioná-la</span>
