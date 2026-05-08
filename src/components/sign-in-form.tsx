@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import { Field, FieldGroup } from "@/components/ui/field"
-import { GoogleIcon } from "./google-icon"
+import { SignInWithGoogleButton } from "./sign-with-google-button"
 
 export function SignInForm({
   className,
@@ -20,10 +19,7 @@ export function SignInForm({
           </p>
         </div>
         <Field>
-          <Button variant="outline" type="button">
-            <GoogleIcon />
-            Entrar com o Google
-          </Button>
+          <SignInWithGoogleButton />
         </Field>
       </FieldGroup>
     </form>
