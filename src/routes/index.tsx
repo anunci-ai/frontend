@@ -17,6 +17,7 @@ import {
 } from "@/components/reui/stepper"
 import { GenerateTextForm } from "@/components/generate-text-form"
 import { UploadImageForm } from "@/components/upload-image-form"
+import { requireAuth } from "@/auth/auth"
 
 const steps = [
   { title: "Descreva seu produto", component: <GenerateTextForm /> },
@@ -25,6 +26,9 @@ const steps = [
 ]
 
 export const Route = createFileRoute("/")({
+  beforeLoad: async () => {
+    await requireAuth()
+  },
   component: Home,
 })
 
