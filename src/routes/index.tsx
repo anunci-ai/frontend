@@ -18,11 +18,12 @@ import {
 import { GenerateTextForm } from "@/components/generate-text-form"
 import { UploadImageForm } from "@/components/upload-image-form"
 import { requireAuth } from "@/auth/auth"
+import { ListingResult } from "@/components/listing-result"
 
 const steps = [
   { title: "Descreva seu produto", component: <GenerateTextForm /> },
   { title: "Upload de imagem", component: <UploadImageForm /> },
-  { title: "Resultado", component: <h1>hello, world</h1> },
+  { title: "Resultado", component: <ListingResult /> },
 ]
 
 export const Route = createFileRoute("/")({

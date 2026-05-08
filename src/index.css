@@ -142,3 +142,12 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+.gradient-bg {
+  background: linear-gradient(
+    135deg,
+    #2563eb 0%,
+    /* tailwind blue-600 */ #4f46e5 50%,
+    /* tailwind indigo-600 */ #6366f1 100% /* tailwind indigo-500 */
+  );
+}
