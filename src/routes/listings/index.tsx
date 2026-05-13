@@ -3,8 +3,14 @@ import { FeedbackWidget } from "@/components/feedback-widget"
 import { ListingsTable } from "@/components/listings-table"
 import { Sidebar } from "@/components/sidebar"
 import { createFileRoute } from "@tanstack/react-router"
+import { z } from "zod"
+
+const listingsSearchSchema = z.object({
+  page: z.coerce.number().int().min(1).catch(1),
+})
 
 export const Route = createFileRoute("/listings/")({
+  validateSearch: listingsSearchSchema,
   component: ListingsPage,
 })
 
