@@ -164,7 +164,7 @@ export function Sidebar() {
                 size="lg"
               >
                 <a
-                  href="/"
+                  href="/listings"
                   className="flex flex-row items-center justify-start gap-3"
                 >
                   <StoreIcon />
