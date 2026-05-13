@@ -38,6 +38,6 @@ export async function requireAuth() {
     })
   } catch {
     clearToken()
-    throw redirect({ to: "/sign-in" })
+    throw redirect({ to: "/app/sign-in" })
   }
 }

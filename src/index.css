@@ -151,3 +151,19 @@
     /* tailwind indigo-600 */ #6366f1 100% /* tailwind indigo-500 */
   );
 }
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) rotate(-2.5deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(2.5deg);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+  transform-origin: 50% 0%;
+  will-change: transform;
+}
