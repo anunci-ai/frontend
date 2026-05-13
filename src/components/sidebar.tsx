@@ -15,8 +15,8 @@ import {
   PlusIcon,
   StoreIcon,
   X,
-  ZapIcon,
 } from "lucide-react"
+import { SubscriptionCard } from "./subscription-card"
 
 // type SidebarClientProps = {
 //   activeId?: string
@@ -197,27 +197,7 @@ export function Sidebar() {
             isCollapsedView ? "items-center gap-2" : "gap-2"
           )}
         >
-          <CollapsedTooltip collapsed={isCollapsedView} label="Fazer upgrade">
-            <Button
-              asChild
-              variant="outline"
-              aria-label="Fazer upgrade"
-              className={cn(
-                isCollapsedView
-                  ? "size-10 p-0"
-                  : "w-full justify-center gap-2 font-semibold"
-              )}
-            >
-              <a
-                href="https://www.anunciaai.com/#precos"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <ZapIcon />
-                {!isCollapsedView && <span>Upgrade</span>}
-              </a>
-            </Button>
-          </CollapsedTooltip>
+          <SubscriptionCard isCollapsedView={isCollapsedView} />
 
           <div
             className={cn(

@@ -240,6 +240,7 @@ export function ListingsTable() {
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 aria-disabled={page === 1}
                 className={page === 1 ? "pointer-events-none opacity-50" : ""}
+                text="Anterior"
               />
             </PaginationItem>
             {Array.from({ length: totalPages }).map((_, i) => (
@@ -259,6 +260,7 @@ export function ListingsTable() {
                 className={
                   page === totalPages ? "pointer-events-none opacity-50" : ""
                 }
+                text="Próximo"
               />
             </PaginationItem>
           </PaginationContent>
