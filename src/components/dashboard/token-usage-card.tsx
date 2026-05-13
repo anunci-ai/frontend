@@ -41,7 +41,7 @@ export function TokenUsageCard() {
 
         {pct === 100 ? (
           <p className="mt-2 text-xs text-muted-foreground">
-            Você antingiu o limite máximo de crição de anúncios.
+            Você antingiu o limite máximo de criação de anúncios.
           </p>
         ) : (
           <p className="mt-2 text-xs text-muted-foreground">

@@ -100,7 +100,7 @@ function CreateListing() {
         </header>
 
         <main className="flex flex-1 flex-col overflow-y-auto p-4 md:p-6 lg:p-8">
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
+          <div className="mx-auto flex w-full flex-col gap-8">
             {/* <CostBanner cost={200} balance={1000} /> */}
 
             <div>

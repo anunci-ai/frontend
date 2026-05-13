@@ -9,14 +9,15 @@ import { FeedbackWidget } from "./feedback-widget"
 import { ModeToggle } from "./mode-toogle"
 import { ProfileButton } from "./profile-button"
 import {
-  ClockIcon,
-  HomeIcon,
+  LayoutDashboardIcon,
   PanelLeftIcon,
   PlusIcon,
+  SettingsIcon,
   StoreIcon,
   X,
 } from "lucide-react"
 import { SubscriptionCard } from "./subscription-card"
+import { Link } from "@tanstack/react-router"
 
 // type SidebarClientProps = {
 //   activeId?: string
@@ -122,13 +123,13 @@ export function Sidebar() {
               isCollapsedView ? "size-10 p-0" : "w-full justify-start gap-2"
             )}
           >
-            <a href="/">
+            <Link to="/create">
               {!isCollapsedView ? (
                 <span className="w-full text-center">Novo Anúncio</span>
               ) : (
                 <PlusIcon />
               )}
-            </a>
+            </Link>
           </Button>
         </CollapsedTooltip>
 
@@ -148,13 +149,13 @@ export function Sidebar() {
                 className="w-full gap-2"
                 size="lg"
               >
-                <a
-                  href="/"
+                <Link
+                  to="/"
                   className="flex flex-row items-center justify-start gap-3"
                 >
-                  <HomeIcon />
-                  <span className="">Início</span>
-                </a>
+                  <LayoutDashboardIcon />
+                  <span className="">Dashboard</span>
+                </Link>
               </Button>
               <Button
                 asChild
@@ -163,13 +164,13 @@ export function Sidebar() {
                 className="w-full gap-2"
                 size="lg"
               >
-                <a
-                  href="/listings"
+                <Link
+                  to="/listings"
                   className="flex flex-row items-center justify-start gap-3"
                 >
                   <StoreIcon />
                   <span className="">Anúncios</span>
-                </a>
+                </Link>
               </Button>
               <Button
                 asChild
@@ -178,13 +179,13 @@ export function Sidebar() {
                 className="w-full gap-2"
                 size="lg"
               >
-                <a
-                  href="/"
+                <Link
+                  to="/"
                   className="flex flex-row items-center justify-start gap-3"
                 >
-                  <ClockIcon />
-                  <span className="">Histórico</span>
-                </a>
+                  <SettingsIcon />
+                  <span className="">Configurações</span>
+                </Link>
               </Button>
             </nav>
           </>
