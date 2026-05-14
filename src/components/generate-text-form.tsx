@@ -1,4 +1,7 @@
-import { ArrowRight, Sparkles } from "lucide-react"
+import { useForm, Controller } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
+import { ArrowRight, LoaderCircleIcon, Sparkles } from "lucide-react"
 import { Button } from "./ui/button"
 import {
   Card,
@@ -17,25 +20,45 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Label } from "./ui/label"
+import { Field, FieldError, FieldGroup, FieldLabel } from "./ui/field"
 import mercadoLibreIcon from "@/assets/mercado-libre.svg"
 
+const schema = z.object({
+  description: z
+    .string()
+    .trim()
+    .min(20, "Descreva o produto com pelo menos 20 caracteres."),
+  marketplace: z.string().min(1, "Selecione um marketplace."),
+})
+
+type Schema = z.infer<typeof schema>
+
 interface GenerateTextFormProps {
-  description: string
-  marketplace: string
-  onChange: (patch: { description?: string; marketplace?: string }) => void
-  onNext: () => void
+  defaultValues?: { description: string; marketplace: string }
+  isPending: boolean
+  onSubmit: (values: { description: string; marketplace: string }) => void
 }
 
-const MIN_CHARS = 20
-
 export function GenerateTextForm({
-  description,
-  marketplace,
-  onChange,
-  onNext,
+  defaultValues,
+  isPending,
+  onSubmit,
 }: GenerateTextFormProps) {
-  const isValid = description.trim().length >= MIN_CHARS && marketplace !== ""
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm<Schema>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      description: defaultValues?.description ?? "",
+      marketplace: defaultValues?.marketplace ?? "MERCADO_LIVRE",
+    },
+  })
+
+  const description = watch("description")
 
   return (
     <div className="flex w-full flex-col gap-4">
@@ -50,51 +73,56 @@ export function GenerateTextForm({
         <CardContent>
           <form
             id="step1-form"
-            onSubmit={(e) => {
-              e.preventDefault()
-              if (isValid) onNext()
-            }}
+            onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-5"
           >
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="description">Descrição do produto</Label>
-              <Textarea
-                id="description"
-                placeholder="Ex: Garrafa térmica Stanley 700ml, mantém líquidos quentes por 12h, aço inox, cor preta, perfeita para atividades ao ar livre..."
-                rows={5}
-                value={description}
-                onChange={(e) => onChange({ description: e.target.value })}
-              />
-              <p className="text-xs text-muted-foreground">
-                {description.trim().length} / {MIN_CHARS}+ caracteres
-              </p>
-            </div>
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="description">
+                  Descrição do produto
+                </FieldLabel>
+                <Textarea
+                  id="description"
+                  placeholder="Ex: Garrafa térmica Stanley 700ml, mantém líquidos quentes por 12h, aço inox, cor preta, perfeita para atividades ao ar livre..."
+                  rows={5}
+                  {...register("description")}
+                />
+                <p className="text-xs text-muted-foreground">
+                  {description.trim().length} / 20+ caracteres
+                </p>
+                <FieldError errors={[errors.description]} />
+              </Field>
 
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="marketplace">Marketplace</Label>
-              <Select
-                value={marketplace}
-                onValueChange={(val) => onChange({ marketplace: val })}
-              >
-                <SelectTrigger id="marketplace" className="w-full">
-                  <SelectValue placeholder="Selecione um marketplace" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="MERCADO_LIVRE">
-                      <span className="flex items-center gap-2">
-                        <img
-                          src={mercadoLibreIcon}
-                          alt="Mercado Livre"
-                          className="size-5"
-                        />
-                        Mercado Livre
-                      </span>
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
+              <Field>
+                <FieldLabel htmlFor="marketplace">Marketplace</FieldLabel>
+                <Controller
+                  name="marketplace"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger id="marketplace" className="w-full">
+                        <SelectValue placeholder="Selecione um marketplace" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="MERCADO_LIVRE">
+                            <span className="flex items-center gap-2">
+                              <img
+                                src={mercadoLibreIcon}
+                                alt="Mercado Livre"
+                                className="size-5"
+                              />
+                              Mercado Livre
+                            </span>
+                          </SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                <FieldError errors={[errors.marketplace]} />
+              </Field>
+            </FieldGroup>
           </form>
         </CardContent>
 
@@ -102,11 +130,20 @@ export function GenerateTextForm({
           <Button
             type="submit"
             form="step1-form"
-            disabled={!isValid}
+            disabled={isPending}
             className="w-full sm:w-auto"
           >
-            Continuar
-            <ArrowRight size={18} />
+            {isPending ? (
+              <>
+                <LoaderCircleIcon size={18} className="animate-spin" />
+                Criando…
+              </>
+            ) : (
+              <>
+                Continuar
+                <ArrowRight size={18} />
+              </>
+            )}
           </Button>
         </CardFooter>
       </Card>

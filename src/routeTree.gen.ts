@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ListingsIndexRouteImport } from './routes/listings/index'
 import { Route as CreateIndexRouteImport } from './routes/create/index'
+import { Route as CreateListingIdRouteImport } from './routes/create/$listingId'
 import { Route as authSignInRouteRouteImport } from './routes/(auth)/sign-in/route'
 import { Route as authAppSignInRouteRouteImport } from './routes/(auth)/app/sign-in/route'
 
@@ -30,6 +31,11 @@ const CreateIndexRoute = CreateIndexRouteImport.update({
   path: '/create/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CreateListingIdRoute = CreateListingIdRouteImport.update({
+  id: '/create/$listingId',
+  path: '/create/$listingId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const authSignInRouteRoute = authSignInRouteRouteImport.update({
   id: '/(auth)/sign-in',
   path: '/sign-in',
@@ -44,6 +50,7 @@ const authAppSignInRouteRoute = authAppSignInRouteRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/sign-in': typeof authSignInRouteRoute
+  '/create/$listingId': typeof CreateListingIdRoute
   '/create/': typeof CreateIndexRoute
   '/listings/': typeof ListingsIndexRoute
   '/app/sign-in': typeof authAppSignInRouteRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/sign-in': typeof authSignInRouteRoute
+  '/create/$listingId': typeof CreateListingIdRoute
   '/create': typeof CreateIndexRoute
   '/listings': typeof ListingsIndexRoute
   '/app/sign-in': typeof authAppSignInRouteRoute
@@ -59,19 +67,33 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/(auth)/sign-in': typeof authSignInRouteRoute
+  '/create/$listingId': typeof CreateListingIdRoute
   '/create/': typeof CreateIndexRoute
   '/listings/': typeof ListingsIndexRoute
   '/(auth)/app/sign-in': typeof authAppSignInRouteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sign-in' | '/create/' | '/listings/' | '/app/sign-in'
+  fullPaths:
+    | '/'
+    | '/sign-in'
+    | '/create/$listingId'
+    | '/create/'
+    | '/listings/'
+    | '/app/sign-in'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sign-in' | '/create' | '/listings' | '/app/sign-in'
+  to:
+    | '/'
+    | '/sign-in'
+    | '/create/$listingId'
+    | '/create'
+    | '/listings'
+    | '/app/sign-in'
   id:
     | '__root__'
     | '/'
     | '/(auth)/sign-in'
+    | '/create/$listingId'
     | '/create/'
     | '/listings/'
     | '/(auth)/app/sign-in'
@@ -80,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   authSignInRouteRoute: typeof authSignInRouteRoute
+  CreateListingIdRoute: typeof CreateListingIdRoute
   CreateIndexRoute: typeof CreateIndexRoute
   ListingsIndexRoute: typeof ListingsIndexRoute
   authAppSignInRouteRoute: typeof authAppSignInRouteRoute
@@ -108,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/create/$listingId': {
+      id: '/create/$listingId'
+      path: '/create/$listingId'
+      fullPath: '/create/$listingId'
+      preLoaderRoute: typeof CreateListingIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(auth)/sign-in': {
       id: '/(auth)/sign-in'
       path: '/sign-in'
@@ -128,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   authSignInRouteRoute: authSignInRouteRoute,
+  CreateListingIdRoute: CreateListingIdRoute,
   CreateIndexRoute: CreateIndexRoute,
   ListingsIndexRoute: ListingsIndexRoute,
   authAppSignInRouteRoute: authAppSignInRouteRoute,

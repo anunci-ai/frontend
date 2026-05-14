@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react"
-import { ArrowLeft, ImageUp, Loader2, Trash2, Wand2 } from "lucide-react"
+import { AlertCircle, ArrowLeft, ImageUp, Loader2, Trash2, Wand2 } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "./ui/button"
 import {
@@ -11,9 +11,12 @@ import {
   CardTitle,
 } from "./ui/card"
 import { cn } from "@/lib/utils"
+import { UploadProgress } from "@/components/create/upload-progress"
 
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"]
 const MAX_SIZE_MB = 10
+
+export type UploadPhase = "idle" | "uploading" | "generating-images" | "error"
 
 interface UploadImageFormProps {
   imageUrl: string | null
@@ -21,7 +24,9 @@ interface UploadImageFormProps {
   onChange: (patch: { imageUrl?: string | null; imageFile?: File | null }) => void
   onBack: () => void
   onGenerate: () => void
-  isGenerating: boolean
+  phase: UploadPhase
+  uploadProgress: number
+  errorMessage?: string
 }
 
 function formatBytes(bytes: number) {
@@ -35,11 +40,14 @@ export function UploadImageForm({
   onChange,
   onBack,
   onGenerate,
-  isGenerating,
+  phase,
+  uploadProgress,
+  errorMessage,
 }: UploadImageFormProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [isDragging, setIsDragging] = useState(false)
   const currentUrlRef = useRef<string | null>(imageUrl)
+  const isLocked = phase === "uploading" || phase === "generating-images"
 
   useEffect(() => {
     currentUrlRef.current = imageUrl
@@ -88,7 +96,7 @@ export function UploadImageForm({
   }
 
   return (
-    <Card className="w-full" aria-busy={isGenerating}>
+    <Card className="w-full" aria-busy={isLocked}>
       <CardHeader>
         <CardTitle>Foto do produto</CardTitle>
         <CardDescription>
@@ -96,7 +104,7 @@ export function UploadImageForm({
         </CardDescription>
       </CardHeader>
 
-      <CardContent className={cn(isGenerating && "pointer-events-none opacity-60")}>
+      <CardContent className={cn(isLocked && "pointer-events-none opacity-60")}>
         <input
           ref={inputRef}
           type="file"
@@ -105,7 +113,13 @@ export function UploadImageForm({
           onChange={handleInputChange}
         />
 
-        {imageUrl ? (
+        {phase === "uploading" && imageFile ? (
+          <UploadProgress
+            fileName={imageFile.name}
+            progress={uploadProgress}
+            fileSize={imageFile.size}
+          />
+        ) : imageUrl ? (
           <div className="flex flex-col gap-3">
             <div className="overflow-hidden rounded-xl ring-1 ring-border">
               <img
@@ -114,6 +128,14 @@ export function UploadImageForm({
                 className="mx-auto max-h-80 w-auto object-contain"
               />
             </div>
+
+            {phase === "error" && errorMessage && (
+              <div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+                <AlertCircle size={16} className="mt-0.5 shrink-0" />
+                <span>{errorMessage}</span>
+              </div>
+            )}
+
             <div className="flex items-center justify-between gap-2">
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium text-foreground">
@@ -131,6 +153,7 @@ export function UploadImageForm({
                   variant="outline"
                   size="sm"
                   onClick={openPicker}
+                  disabled={isLocked}
                 >
                   Trocar imagem
                 </Button>
@@ -140,6 +163,7 @@ export function UploadImageForm({
                   size="sm"
                   className="text-destructive hover:text-destructive"
                   onClick={handleRemove}
+                  disabled={isLocked}
                   aria-label="Remover imagem"
                 >
                   <Trash2 size={16} />
@@ -188,7 +212,7 @@ export function UploadImageForm({
           type="button"
           variant="outline"
           onClick={onBack}
-          disabled={isGenerating}
+          disabled={isLocked}
         >
           <ArrowLeft size={18} />
           Voltar
@@ -196,12 +220,22 @@ export function UploadImageForm({
         <Button
           type="button"
           onClick={onGenerate}
-          disabled={!imageUrl || isGenerating}
+          disabled={!imageUrl || isLocked}
         >
-          {isGenerating ? (
+          {phase === "generating-images" ? (
             <>
               <Loader2 size={18} className="animate-spin" />
-              Gerando...
+              Gerando imagens…
+            </>
+          ) : phase === "uploading" ? (
+            <>
+              <Loader2 size={18} className="animate-spin" />
+              Enviando…
+            </>
+          ) : phase === "error" ? (
+            <>
+              Tentar novamente
+              <Wand2 size={18} />
             </>
           ) : (
             <>

@@ -1,8 +1,9 @@
-import { api } from "./api-client"
+import { api, ngrok } from "./api-client"
 
 export async function generateText(listingId: string) {
-  // const apiClient =
-  //   process.env.NEXT_PUBLIC_NODE_ENV === "development" ? apiNgrok : api
+  const nodeEnv = import.meta.env.VITE_NODE_ENV
 
-  await api.patch(`listings/generate-text/${listingId}`).json<void>()
+  const apiClient = nodeEnv === "development" ? ngrok : api
+
+  await apiClient.patch(`listings/generate-text/${listingId}`).json<void>()
 }

@@ -1,17 +1,22 @@
 import ky from "ky"
 import { getToken } from "@/auth/auth"
 
-export const api = ky.create({
-  baseUrl: import.meta.env.VITE_API_URL,
-  hooks: {
-    beforeRequest: [
-      async ({ request }) => {
-        const token = getToken()
+function createAPI(baseUrl: string) {
+  return ky.create({
+    baseUrl,
+    hooks: {
+      beforeRequest: [
+        async ({ request }) => {
+          const token = getToken()
 
-        if (token) {
-          request.headers.set("Authorization", `Bearer ${token}`)
-        }
-      },
-    ],
-  },
-})
+          if (token) {
+            request.headers.set("Authorization", `Bearer ${token}`)
+          }
+        },
+      ],
+    },
+  })
+}
+
+export const api = createAPI(import.meta.env.VITE_API_URL)
+export const ngrok = createAPI(import.meta.env.VITE_NGROK_URL)
