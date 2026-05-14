@@ -1,14 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-refresh/only-export-components */
 import { useEffect, useRef, useState } from "react"
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { AlertCircle, Loader2, RefreshCw } from "lucide-react"
-import { Link } from "@tanstack/react-router"
-import { Sidebar } from "@/components/sidebar"
-import { BottomNavigation } from "@/components/bottom-navigation"
-import { FeedbackWidget } from "@/components/feedback-widget"
+import { PageHeader } from "@/components/page-header"
+import { CreateFlowStepper } from "@/components/create-flow/create-flow-stepper"
 import {
   UploadImageForm,
   type UploadPhase,
@@ -16,17 +14,9 @@ import {
 import { ListingResult } from "@/components/listing-result"
 import { ListingStatusBadge } from "@/components/listing-status-badge"
 import {
-  Stepper,
   StepperContent,
-  StepperIndicator,
-  StepperItem,
-  StepperNav,
   StepperPanel,
-  StepperSeparator,
-  StepperTitle,
-  StepperTrigger,
 } from "@/components/reui/stepper"
-import { requireAuth } from "@/auth/auth"
 import { generateText } from "@/http/generate-text"
 import { generateImages } from "@/http/generate-images"
 import { getGeneratedImages } from "@/http/get-generated-images"
@@ -35,10 +25,7 @@ import { uploadImageWithProgress } from "@/http/upload-image-with-progress"
 import { Button } from "@/components/ui/button"
 import type { ListingStatus } from "@/http/get-listing"
 
-export const Route = createFileRoute("/create/$listingId")({
-  beforeLoad: async () => {
-    await requireAuth()
-  },
+export const Route = createFileRoute("/_app/create/$listingId")({
   component: CreateListingFlow,
 })
 
@@ -69,18 +56,13 @@ function deriveView(
   return "text-generating"
 }
 
-const steps = [
-  { value: 1, title: "Produto" },
-  { value: 2, title: "Imagem" },
-  { value: 3, title: "Resultado" },
-]
-
 function CreateListingFlow() {
   const { listingId } = Route.useParams()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
-  const { listing, isLoading, hasTimedOut, resetTimeout } = useListingStatus(listingId)
+  const { listing, isLoading, hasTimedOut, resetTimeout } =
+    useListingStatus(listingId)
 
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [imageFile, setImageFile] = useState<File | null>(null)
@@ -92,11 +74,7 @@ function CreateListingFlow() {
   const view = deriveView(isLoading, listing?.status, uploadPhase, hasTimedOut)
 
   const activeStep =
-    view === "image-generating" || view === "result" || view === "error"
-      ? 3
-      : view === "loading" || view === "text-generating"
-        ? 2
-        : 2
+    view === "image-generating" || view === "result" || view === "error" ? 3 : 2
 
   const step2Completed =
     listing?.status === "IMAGE_PROCESSING" ||
@@ -201,147 +179,96 @@ function CreateListingFlow() {
 
   if (view === "loading") {
     return (
-      <div className="flex min-h-svh w-full">
-        <Sidebar />
-        <BottomNavigation />
-        <div className="flex flex-1 items-center justify-center">
-          <Loader2 size={32} className="animate-spin text-muted-foreground" />
-        </div>
+      <div className="flex flex-1 items-center justify-center">
+        <Loader2 size={32} className="animate-spin text-muted-foreground" />
       </div>
     )
   }
 
   return (
-    <div className="flex min-h-svh w-full">
-      <Sidebar />
-      <BottomNavigation />
+    <div className="mx-auto flex w-full flex-col gap-8">
+      <PageHeader
+        title="Criar novo anúncio"
+        subtitle="Em poucos passos, nossa IA gera um anúncio completo e otimizado."
+        right={
+          listing?.status && <ListingStatusBadge status={listing.status} />
+        }
+      />
 
-      <div className="flex min-h-0 w-full flex-col">
-        <header className="flex h-20 w-full shrink-0 items-center px-4">
-          <div className="ml-auto">
-            <FeedbackWidget />
-          </div>
-        </header>
-
-        <main className="flex flex-1 flex-col overflow-y-auto p-4 pb-28 md:p-6 md:pb-28 lg:p-8 lg:pb-8">
-          <div className="mx-auto flex w-full flex-col gap-8">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <h1 className="text-2xl font-semibold tracking-tight">
-                  Criar novo anúncio
-                </h1>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Em poucos passos, nossa IA gera um anúncio completo e
-                  otimizado.
-                </p>
-              </div>
-              {listing?.status && (
-                <ListingStatusBadge status={listing.status} />
+      <CreateFlowStepper
+        value={activeStep}
+        completedFor={(step) => {
+          if (step === 1) return true
+          if (step === 2) return step2Completed
+          return step3Completed
+        }}
+        disabledFor={(step) => {
+          if (step === 3) return view !== "result" && view !== "error"
+          return false
+        }}
+      >
+        <StepperPanel>
+          <StepperContent value={2}>
+            <div className="animate-in duration-300 fade-in">
+              {view === "text-generating" ? (
+                <TextGeneratingPanel
+                  hasTimedOut={hasTimedOut}
+                  isPolling={isProcessing(listing?.status) && !hasTimedOut}
+                  onRetry={handleRetryTextGen}
+                />
+              ) : (
+                <UploadImageForm
+                  imageUrl={imageUrl}
+                  imageFile={imageFile}
+                  onChange={(patch) => {
+                    if ("imageUrl" in patch)
+                      setImageUrl(patch.imageUrl ?? null)
+                    if ("imageFile" in patch)
+                      setImageFile(patch.imageFile ?? null)
+                  }}
+                  onBack={() =>
+                    navigate({
+                      to: "/listings",
+                      search: { page: 1 },
+                    })
+                  }
+                  onGenerate={handleGenerate}
+                  phase={uploadPhase}
+                  uploadProgress={uploadProgress}
+                  errorMessage={uploadErrorMsg}
+                />
               )}
             </div>
+          </StepperContent>
 
-            <Stepper value={activeStep} onValueChange={() => {}}>
-              <StepperNav>
-                {steps.map((s, idx) => (
-                  <StepperItem
-                    key={s.value}
-                    step={s.value}
-                    completed={
-                      s.value === 1
-                        ? true
-                        : s.value === 2
-                          ? step2Completed
-                          : step3Completed
-                    }
-                    disabled={
-                      s.value === 2
-                        ? false
-                        : s.value === 3
-                          ? view !== "result" && view !== "error"
-                          : false
-                    }
-                    className="relative flex-1 items-start"
-                  >
-                    <StepperTrigger className="flex flex-col gap-2.5">
-                      <StepperIndicator>{s.value}</StepperIndicator>
-                      <StepperTitle>{s.title}</StepperTitle>
-                    </StepperTrigger>
-                    {idx < steps.length - 1 && (
-                      <StepperSeparator className="absolute inset-x-0 top-3 left-[calc(50%+0.875rem)] m-0 group-data-[orientation=horizontal]/stepper-nav:w-[calc(100%-2rem+0.225rem)] group-data-[orientation=horizontal]/stepper-nav:flex-none group-data-[state=completed]/step:bg-primary" />
-                    )}
-                  </StepperItem>
-                ))}
-              </StepperNav>
-
-              <div className="mt-8">
-                <StepperPanel>
-                  <StepperContent value={2}>
-                    <div className="animate-in duration-300 fade-in">
-                      {view === "text-generating" ? (
-                        <TextGeneratingPanel
-                          hasTimedOut={hasTimedOut}
-                          isPolling={
-                            isProcessing(listing?.status) && !hasTimedOut
-                          }
-                          onRetry={handleRetryTextGen}
-                        />
-                      ) : (
-                        <UploadImageForm
-                          imageUrl={imageUrl}
-                          imageFile={imageFile}
-                          onChange={(patch) => {
-                            if ("imageUrl" in patch)
-                              setImageUrl(patch.imageUrl ?? null)
-                            if ("imageFile" in patch)
-                              setImageFile(patch.imageFile ?? null)
-                          }}
-                          onBack={() =>
-                            navigate({
-                              to: "/listings",
-                              search: { page: "/listings" },
-                            })
-                          }
-                          onGenerate={handleGenerate}
-                          phase={uploadPhase}
-                          uploadProgress={uploadProgress}
-                          errorMessage={uploadErrorMsg}
-                        />
-                      )}
-                    </div>
-                  </StepperContent>
-
-                  <StepperContent value={3}>
-                    <div className="animate-in duration-300 fade-in">
-                      {view === "error" ? (
-                        <ErrorPanel
-                          hasTimedOut={hasTimedOut}
-                          status={listing?.status}
-                          onRetryText={handleRetryTextGen}
-                          onRetryImages={handleGenerate}
-                        />
-                      ) : view === "image-generating" ? (
-                        <ImageGeneratingPanel
-                          hasTimedOut={hasTimedOut}
-                          onRetry={handleGenerate}
-                        />
-                      ) : listing ? (
-                        <ListingResult
-                          listing={listing}
-                          generatedImages={generatedImages}
-                          originalImageUrl={
-                            uploadedImageUrl ?? listing.originalImageUrl
-                          }
-                          onReset={() => navigate({ to: "/create" })}
-                        />
-                      ) : null}
-                    </div>
-                  </StepperContent>
-                </StepperPanel>
-              </div>
-            </Stepper>
-          </div>
-        </main>
-      </div>
+          <StepperContent value={3}>
+            <div className="animate-in duration-300 fade-in">
+              {view === "error" ? (
+                <ErrorPanel
+                  hasTimedOut={hasTimedOut}
+                  status={listing?.status}
+                  onRetryText={handleRetryTextGen}
+                  onRetryImages={handleGenerate}
+                />
+              ) : view === "image-generating" ? (
+                <ImageGeneratingPanel
+                  hasTimedOut={hasTimedOut}
+                  onRetry={handleGenerate}
+                />
+              ) : listing ? (
+                <ListingResult
+                  listing={listing}
+                  generatedImages={generatedImages}
+                  originalImageUrl={
+                    uploadedImageUrl ?? listing.originalImageUrl
+                  }
+                  onReset={() => navigate({ to: "/create" })}
+                />
+              ) : null}
+            </div>
+          </StepperContent>
+        </StepperPanel>
+      </CreateFlowStepper>
     </div>
   )
 }
@@ -480,7 +407,7 @@ function ErrorPanel({
           Tentar novamente
         </Button>
         <Button variant="ghost" asChild>
-          <Link to="/listings" search={{ page: "/listings" }}>
+          <Link to="/listings" search={{ page: 1 }}>
             Ver meus anúncios
           </Link>
         </Button>

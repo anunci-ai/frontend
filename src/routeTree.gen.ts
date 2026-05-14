@@ -9,37 +9,42 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as ListingsIndexRouteImport } from './routes/listings/index'
-import { Route as CreateIndexRouteImport } from './routes/create/index'
-import { Route as CreateListingIdRouteImport } from './routes/create/$listingId'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as authSignInRouteRouteImport } from './routes/(auth)/sign-in/route'
+import { Route as AppListingsIndexRouteImport } from './routes/_app/listings/index'
+import { Route as AppCreateIndexRouteImport } from './routes/_app/create/index'
+import { Route as AppCreateListingIdRouteImport } from './routes/_app/create/$listingId'
 import { Route as authAppSignInRouteRouteImport } from './routes/(auth)/app/sign-in/route'
 
-const IndexRoute = IndexRouteImport.update({
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ListingsIndexRoute = ListingsIndexRouteImport.update({
-  id: '/listings/',
-  path: '/listings/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CreateIndexRoute = CreateIndexRouteImport.update({
-  id: '/create/',
-  path: '/create/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CreateListingIdRoute = CreateListingIdRouteImport.update({
-  id: '/create/$listingId',
-  path: '/create/$listingId',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
 const authSignInRouteRoute = authSignInRouteRouteImport.update({
   id: '/(auth)/sign-in',
   path: '/sign-in',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppListingsIndexRoute = AppListingsIndexRouteImport.update({
+  id: '/listings/',
+  path: '/listings/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCreateIndexRoute = AppCreateIndexRouteImport.update({
+  id: '/create/',
+  path: '/create/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCreateListingIdRoute = AppCreateListingIdRouteImport.update({
+  id: '/create/$listingId',
+  path: '/create/$listingId',
+  getParentRoute: () => AppRoute,
 } as any)
 const authAppSignInRouteRoute = authAppSignInRouteRouteImport.update({
   id: '/(auth)/app/sign-in',
@@ -48,95 +53,80 @@ const authAppSignInRouteRoute = authAppSignInRouteRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AppIndexRoute
   '/sign-in': typeof authSignInRouteRoute
-  '/create/$listingId': typeof CreateListingIdRoute
-  '/create/': typeof CreateIndexRoute
-  '/listings/': typeof ListingsIndexRoute
   '/app/sign-in': typeof authAppSignInRouteRoute
+  '/create/$listingId': typeof AppCreateListingIdRoute
+  '/create/': typeof AppCreateIndexRoute
+  '/listings/': typeof AppListingsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/sign-in': typeof authSignInRouteRoute
-  '/create/$listingId': typeof CreateListingIdRoute
-  '/create': typeof CreateIndexRoute
-  '/listings': typeof ListingsIndexRoute
+  '/': typeof AppIndexRoute
   '/app/sign-in': typeof authAppSignInRouteRoute
+  '/create/$listingId': typeof AppCreateListingIdRoute
+  '/create': typeof AppCreateIndexRoute
+  '/listings': typeof AppListingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
   '/(auth)/sign-in': typeof authSignInRouteRoute
-  '/create/$listingId': typeof CreateListingIdRoute
-  '/create/': typeof CreateIndexRoute
-  '/listings/': typeof ListingsIndexRoute
+  '/_app/': typeof AppIndexRoute
   '/(auth)/app/sign-in': typeof authAppSignInRouteRoute
+  '/_app/create/$listingId': typeof AppCreateListingIdRoute
+  '/_app/create/': typeof AppCreateIndexRoute
+  '/_app/listings/': typeof AppListingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/sign-in'
+    | '/app/sign-in'
     | '/create/$listingId'
     | '/create/'
     | '/listings/'
-    | '/app/sign-in'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/sign-in'
+    | '/'
+    | '/app/sign-in'
     | '/create/$listingId'
     | '/create'
     | '/listings'
-    | '/app/sign-in'
   id:
     | '__root__'
-    | '/'
+    | '/_app'
     | '/(auth)/sign-in'
-    | '/create/$listingId'
-    | '/create/'
-    | '/listings/'
+    | '/_app/'
     | '/(auth)/app/sign-in'
+    | '/_app/create/$listingId'
+    | '/_app/create/'
+    | '/_app/listings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
   authSignInRouteRoute: typeof authSignInRouteRoute
-  CreateListingIdRoute: typeof CreateListingIdRoute
-  CreateIndexRoute: typeof CreateIndexRoute
-  ListingsIndexRoute: typeof ListingsIndexRoute
   authAppSignInRouteRoute: typeof authAppSignInRouteRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/listings/': {
-      id: '/listings/'
-      path: '/listings'
-      fullPath: '/listings/'
-      preLoaderRoute: typeof ListingsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/create/': {
-      id: '/create/'
-      path: '/create'
-      fullPath: '/create/'
-      preLoaderRoute: typeof CreateIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/create/$listingId': {
-      id: '/create/$listingId'
-      path: '/create/$listingId'
-      fullPath: '/create/$listingId'
-      preLoaderRoute: typeof CreateListingIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
     }
     '/(auth)/sign-in': {
       id: '/(auth)/sign-in'
@@ -144,6 +134,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/sign-in'
       preLoaderRoute: typeof authSignInRouteRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_app/listings/': {
+      id: '/_app/listings/'
+      path: '/listings'
+      fullPath: '/listings/'
+      preLoaderRoute: typeof AppListingsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/create/': {
+      id: '/_app/create/'
+      path: '/create'
+      fullPath: '/create/'
+      preLoaderRoute: typeof AppCreateIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/create/$listingId': {
+      id: '/_app/create/$listingId'
+      path: '/create/$listingId'
+      fullPath: '/create/$listingId'
+      preLoaderRoute: typeof AppCreateListingIdRouteImport
+      parentRoute: typeof AppRoute
     }
     '/(auth)/app/sign-in': {
       id: '/(auth)/app/sign-in'
@@ -155,12 +166,25 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AppRouteChildren {
+  AppIndexRoute: typeof AppIndexRoute
+  AppCreateListingIdRoute: typeof AppCreateListingIdRoute
+  AppCreateIndexRoute: typeof AppCreateIndexRoute
+  AppListingsIndexRoute: typeof AppListingsIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppIndexRoute: AppIndexRoute,
+  AppCreateListingIdRoute: AppCreateListingIdRoute,
+  AppCreateIndexRoute: AppCreateIndexRoute,
+  AppListingsIndexRoute: AppListingsIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
   authSignInRouteRoute: authSignInRouteRoute,
-  CreateListingIdRoute: CreateListingIdRoute,
-  CreateIndexRoute: CreateIndexRoute,
-  ListingsIndexRoute: ListingsIndexRoute,
   authAppSignInRouteRoute: authAppSignInRouteRoute,
 }
 export const routeTree = rootRouteImport
