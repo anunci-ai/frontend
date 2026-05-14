@@ -3,6 +3,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { Sidebar } from "@/components/sidebar"
+import { BottomNavigation } from "@/components/bottom-navigation"
 import { FeedbackWidget } from "@/components/feedback-widget"
 import { GenerateTextForm } from "@/components/generate-text-form"
 import {
@@ -46,6 +47,7 @@ function CreateListing() {
   return (
     <div className="flex min-h-svh w-full">
       <Sidebar />
+      <BottomNavigation />
 
       <div className="flex min-h-0 w-full flex-col">
         <header className="flex h-20 w-full shrink-0 items-center px-4">
@@ -54,7 +56,7 @@ function CreateListing() {
           </div>
         </header>
 
-        <main className="flex flex-1 flex-col overflow-y-auto p-4 md:p-6 lg:p-8">
+        <main className="flex flex-1 flex-col overflow-y-auto p-4 pb-28 md:p-6 md:pb-28 lg:p-8 lg:pb-8">
           <div className="mx-auto flex w-full flex-col gap-8">
             <div>
               <h1 className="text-2xl font-semibold tracking-tight">

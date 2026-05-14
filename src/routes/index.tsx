@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router"
 import { TrendingUp } from "lucide-react"
 
 import { Sidebar } from "@/components/sidebar"
+import { BottomNavigation } from "@/components/bottom-navigation"
 import { FeedbackWidget } from "@/components/feedback-widget"
 import { StatCard } from "@/components/dashboard/stat-card"
 import { PlanCard } from "@/components/dashboard/plan-card"
@@ -22,6 +23,7 @@ function Home() {
   return (
     <div className="flex min-h-svh w-full">
       <Sidebar />
+      <BottomNavigation />
 
       <div className="flex min-h-0 w-full flex-col">
         <header className="flex h-20 w-full shrink-0 items-center px-4">
@@ -30,7 +32,7 @@ function Home() {
           </div>
         </header>
 
-        <main className="flex flex-1 flex-col gap-6 overflow-y-auto p-4 md:p-6 lg:p-8">
+        <main className="flex flex-1 flex-col gap-6 overflow-y-auto p-4 pb-28 md:p-6 md:pb-28 lg:p-8 lg:pb-8">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
             <p className="mt-1 text-sm text-muted-foreground">

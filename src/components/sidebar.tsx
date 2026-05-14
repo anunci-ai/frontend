@@ -1,6 +1,5 @@
 import logo from "../assets/logo.png"
-import { useEffect, useState } from "react"
-
+import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -8,94 +7,38 @@ import { CollapsedTooltip } from "./collapsed-tooltip"
 import { FeedbackWidget } from "./feedback-widget"
 import { ModeToggle } from "./mode-toogle"
 import { ProfileButton } from "./profile-button"
-import {
-  LayoutDashboardIcon,
-  PanelLeftIcon,
-  PlusIcon,
-  SettingsIcon,
-  StoreIcon,
-  X,
-} from "lucide-react"
+import { PanelLeftIcon, PlusIcon } from "lucide-react"
 import { SubscriptionCard } from "./subscription-card"
 import { Link } from "@tanstack/react-router"
-
-// type SidebarClientProps = {
-//   activeId?: string
-// }
+import { NAV_ITEMS } from "@/lib/nav-items"
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
-
-  const isCollapsedView = collapsed && !mobileOpen
-
-  useEffect(() => {
-    if (!mobileOpen) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = "hidden"
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMobileOpen(false)
-    }
-    window.addEventListener("keydown", onKey)
-    return () => {
-      document.body.style.overflow = prev
-      window.removeEventListener("keydown", onKey)
-    }
-  }, [mobileOpen])
 
   return (
     <TooltipProvider>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        aria-label="Abrir menu"
-        onClick={() => setMobileOpen(true)}
-        className={cn(
-          "fixed top-3 left-3 z-40 bg-sidebar transition-opacity duration-200 lg:hidden",
-          mobileOpen ? "pointer-events-none opacity-0" : "opacity-100"
-        )}
-      >
-        <PanelLeftIcon />
-      </Button>
-
       <aside
         aria-label="Navegação principal"
         className={cn(
-          "fixed inset-0 z-50 flex h-dvh w-full flex-col gap-2 border-r border-sidebar-border bg-sidebar p-3 transition-transform duration-300 ease-in-out will-change-transform",
-          mobileOpen
-            ? "translate-x-0"
-            : "pointer-events-none -translate-x-full",
-          "lg:pointer-events-auto lg:sticky lg:inset-auto lg:top-0 lg:z-auto lg:translate-x-0 lg:transition-all lg:duration-200",
-          isCollapsedView ? "lg:w-16" : "lg:w-85"
+          "sticky top-0 hidden h-dvh flex-col gap-2 border-r border-sidebar-border bg-sidebar p-3 transition-all duration-200 lg:flex",
+          collapsed ? "w-16" : "w-85"
         )}
       >
         {/* Header */}
         <div
           className={cn(
             "flex items-center",
-            isCollapsedView ? "lg:flex-col lg:gap-2" : "justify-between"
+            collapsed ? "flex-col gap-2" : "justify-between"
           )}
         >
           <img
             src={logo}
             alt="Logo"
-            className={cn("size-16", isCollapsedView && "size-8")}
+            className={cn("size-16", collapsed && "size-8")}
           />
 
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            aria-label="Fechar menu"
-            onClick={() => setMobileOpen(false)}
-            className="lg:hidden"
-          >
-            <X />
-          </Button>
-
           <CollapsedTooltip
-            collapsed={isCollapsedView}
+            collapsed={collapsed}
             label={collapsed ? "Expandir" : "Recolher"}
           >
             <Button
@@ -105,7 +48,6 @@ export function Sidebar() {
               aria-label={
                 collapsed ? "Expandir barra lateral" : "Recolher barra lateral"
               }
-              className="hidden lg:inline-flex"
             >
               <PanelLeftIcon />
             </Button>
@@ -113,18 +55,18 @@ export function Sidebar() {
         </div>
 
         {/* Primary CTA */}
-        <CollapsedTooltip collapsed={isCollapsedView} label="Novo Anúncio">
+        <CollapsedTooltip collapsed={collapsed} label="Novo Anúncio">
           <Button
             asChild
             size="lg"
             aria-label="Novo Anúncio"
             className={cn(
               "my-5",
-              isCollapsedView ? "size-10 p-0" : "w-full justify-start gap-2"
+              collapsed ? "size-10 p-0" : "w-full justify-start gap-2"
             )}
           >
             <Link to="/create">
-              {!isCollapsedView ? (
+              {!collapsed ? (
                 <span className="w-full text-center">Novo Anúncio</span>
               ) : (
                 <PlusIcon />
@@ -133,82 +75,55 @@ export function Sidebar() {
           </Button>
         </CollapsedTooltip>
 
-        {/* Fixed nav */}
-
-        {/* History */}
-        {!isCollapsedView && (
-          <>
-            <nav
-              aria-label="Histórico de anúncios"
-              className="flex min-h-0 min-w-0 flex-1 flex-col gap-4"
-            >
-              <Button
-                asChild
-                variant="ghost"
-                aria-label="Novo Anúncio"
-                className="w-full gap-2"
-                size="lg"
-              >
-                <Link
-                  to="/"
-                  className="flex flex-row items-center justify-start gap-3"
+        {/* Primary nav */}
+        {!collapsed && (
+          <nav
+            aria-label="Histórico de anúncios"
+            className="flex min-h-0 min-w-0 flex-1 flex-col gap-4"
+          >
+            {NAV_ITEMS.map((item) => {
+              const Icon = item.icon
+              return (
+                <Button
+                  key={item.label}
+                  asChild
+                  variant="ghost"
+                  aria-label={item.label}
+                  className="w-full gap-2"
+                  size="lg"
                 >
-                  <LayoutDashboardIcon />
-                  <span className="">Dashboard</span>
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="ghost"
-                aria-label="Novo Anúncio"
-                className="w-full gap-2"
-                size="lg"
-              >
-                <Link
-                  to="/listings"
-                  className="flex flex-row items-center justify-start gap-3"
-                >
-                  <StoreIcon />
-                  <span className="">Anúncios</span>
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="ghost"
-                aria-label="Novo Anúncio"
-                className="w-full gap-2"
-                size="lg"
-              >
-                <Link
-                  to="/"
-                  className="flex flex-row items-center justify-start gap-3"
-                >
-                  <SettingsIcon />
-                  <span className="">Configurações</span>
-                </Link>
-              </Button>
-            </nav>
-          </>
+                  <Link
+                    to={item.to}
+                    className="flex flex-row items-center justify-start gap-3"
+                  >
+                    <Icon />
+                    <span>{item.label}</span>
+                  </Link>
+                </Button>
+              )
+            })}
+          </nav>
         )}
-        {isCollapsedView && <div className="flex-1" />}
+        {collapsed && <div className="flex-1" />}
+
         {/* Footer */}
         <div
           className={cn(
             "flex flex-col",
-            isCollapsedView ? "items-center gap-2" : "gap-2"
+            collapsed ? "items-center gap-2" : "gap-2"
           )}
         >
-          <SubscriptionCard isCollapsedView={isCollapsedView} />
+          <SubscriptionCard isCollapsedView={collapsed} />
 
           <div
             className={cn(
               "flex items-center",
-              isCollapsedView ? "justify-center" : "justify-between gap-2"
+              collapsed ? "justify-center" : "justify-between gap-2"
             )}
           >
-            <ProfileButton isSidebarCollapsed={isCollapsedView} />
+            <ProfileButton isSidebarCollapsed={collapsed} />
 
-            {!isCollapsedView && (
+            {!collapsed && (
               <div className="flex items-center justify-between gap-1">
                 <ModeToggle />
                 <FeedbackWidget />

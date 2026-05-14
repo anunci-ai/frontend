@@ -7,6 +7,7 @@ import { toast } from "sonner"
 import { AlertCircle, Loader2, RefreshCw } from "lucide-react"
 import { Link } from "@tanstack/react-router"
 import { Sidebar } from "@/components/sidebar"
+import { BottomNavigation } from "@/components/bottom-navigation"
 import { FeedbackWidget } from "@/components/feedback-widget"
 import {
   UploadImageForm,
@@ -79,7 +80,7 @@ function CreateListingFlow() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
-  const { listing, isLoading, hasTimedOut } = useListingStatus(listingId)
+  const { listing, isLoading, hasTimedOut, resetTimeout } = useListingStatus(listingId)
 
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [imageFile, setImageFile] = useState<File | null>(null)
@@ -153,6 +154,7 @@ function CreateListingFlow() {
 
   async function handleGenerate() {
     if (!imageFile) return
+    resetTimeout()
 
     uploadAbortRef.current?.abort()
     const controller = new AbortController()
@@ -191,6 +193,7 @@ function CreateListingFlow() {
   const generatedImages = imagesData?.images ?? []
 
   function handleRetryTextGen() {
+    resetTimeout()
     hasTriggeredTextRef.current = false
     generateImagesMutation.reset()
     queryClient.invalidateQueries({ queryKey: ["listing", listingId] })
@@ -200,6 +203,7 @@ function CreateListingFlow() {
     return (
       <div className="flex min-h-svh w-full">
         <Sidebar />
+        <BottomNavigation />
         <div className="flex flex-1 items-center justify-center">
           <Loader2 size={32} className="animate-spin text-muted-foreground" />
         </div>
@@ -210,6 +214,7 @@ function CreateListingFlow() {
   return (
     <div className="flex min-h-svh w-full">
       <Sidebar />
+      <BottomNavigation />
 
       <div className="flex min-h-0 w-full flex-col">
         <header className="flex h-20 w-full shrink-0 items-center px-4">
@@ -218,7 +223,7 @@ function CreateListingFlow() {
           </div>
         </header>
 
-        <main className="flex flex-1 flex-col overflow-y-auto p-4 md:p-6 lg:p-8">
+        <main className="flex flex-1 flex-col overflow-y-auto p-4 pb-28 md:p-6 md:pb-28 lg:p-8 lg:pb-8">
           <div className="mx-auto flex w-full flex-col gap-8">
             <div className="flex items-center justify-between gap-4">
               <div>

@@ -15,47 +15,45 @@ export function isTerminal(s?: ListingStatus) {
 }
 
 export function useListingStatus(listingId: string) {
-  const [hasTimedOut, setHasTimedOut] = useState(false)
-  const phaseRef = useRef<{ status: ListingStatus; startedAt: number } | null>(
-    null
-  )
+  // Stores which status triggered the timeout; hasTimedOut is derived by
+  // comparing this against the current status — so it resets automatically
+  // when the status changes without any synchronous setState in effects.
+  const [timedOutForStatus, setTimedOutForStatus] = useState<ListingStatus | null>(null)
+  const phaseRef = useRef<{ status: ListingStatus; startedAt: number } | null>(null)
 
   const query = useQuery({
     queryKey: ["listing", listingId],
     queryFn: () => getListing(listingId),
     enabled: !!listingId,
     refetchInterval: (q) => {
-      const status = q.state.data?.listing.status
-      if (!isProcessing(status) || hasTimedOut) return false
+      const s = q.state.data?.listing.status
+      if (!isProcessing(s)) return false
+      if (timedOutForStatus !== null && timedOutForStatus === s) return false
       return LISTING_POLL_INTERVAL
     },
   })
 
   const status = query.data?.listing.status
+  const hasTimedOut = timedOutForStatus !== null && timedOutForStatus === status
 
   useEffect(() => {
     if (!status || !isProcessing(status)) {
       phaseRef.current = null
-      setHasTimedOut(false)
       return
     }
-
     if (phaseRef.current?.status !== status) {
       phaseRef.current = { status, startedAt: Date.now() }
-      setHasTimedOut(false)
     }
-
     const elapsed = Date.now() - phaseRef.current.startedAt
     const remaining = Math.max(0, LISTING_POLL_TIMEOUT_MS - elapsed)
-
-    if (remaining <= 0) {
-      setHasTimedOut(true)
-      return
-    }
-
-    const id = setTimeout(() => setHasTimedOut(true), remaining)
+    const id = setTimeout(() => setTimedOutForStatus(status), remaining)
     return () => clearTimeout(id)
   }, [status])
+
+  function resetTimeout() {
+    setTimedOutForStatus(null)
+    phaseRef.current = null
+  }
 
   return {
     listing: query.data?.listing ?? null,
@@ -65,5 +63,6 @@ export function useListingStatus(listingId: string) {
     hasTimedOut,
     error: query.error,
     refetch: query.refetch,
+    resetTimeout,
   }
 }
