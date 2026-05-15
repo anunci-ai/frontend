@@ -1,4 +1,3 @@
-import { useState } from "react"
 import {
   Dialog,
   DialogContent,
@@ -6,21 +5,22 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { useOnboarding } from "@/hooks/use-onboarding"
-import { ONBOARDING_PLANS } from "@/lib/onboarding-plans"
 import { OnboardingHero } from "@/components/onboarding/onboarding-hero"
-import { PricingCard } from "@/components/onboarding/pricing-card"
-import type { OnboardingStatus } from "@/components/onboarding/pricing-card"
+import {
+  PricingCard,
+  PricingCardError,
+  PricingCardSkeleton,
+} from "@/components/onboarding/pricing-card"
 
 export function OnboardingDialog() {
-  const { isOpen, completeOnboarding } = useOnboarding()
-  const [status, setStatus] = useState<OnboardingStatus>("idle")
-  const plan = ONBOARDING_PLANS[0]!
-
-  function handleSelect() {
-    setStatus("submitting")
-    setTimeout(() => setStatus("complete"), 700)
-    setTimeout(() => completeOnboarding(), 2000)
-  }
+  const {
+    isOpen,
+    plan,
+    isPlansError,
+    refetchPlans,
+    subscribe,
+    status,
+  } = useOnboarding()
 
   return (
     <Dialog open={isOpen}>
@@ -39,7 +39,15 @@ export function OnboardingDialog() {
           anúncios com inteligência artificial.
         </DialogDescription>
         <OnboardingHero />
-        <PricingCard plan={plan} onSelect={handleSelect} status={status} />
+        {!plan ? (
+          isPlansError ? (
+            <PricingCardError onRetry={refetchPlans} />
+          ) : (
+            <PricingCardSkeleton />
+          )
+        ) : (
+          <PricingCard plan={plan} onSelect={subscribe} status={status} />
+        )}
       </DialogContent>
     </Dialog>
   )

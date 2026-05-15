@@ -1,9 +1,8 @@
-import { Check, ArrowRight, LoaderCircle } from "lucide-react"
+import { Check, ArrowRight, LoaderCircle, RefreshCw } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
-import type { OnboardingPlan } from "@/lib/onboarding-plans"
-
-export type OnboardingStatus = "idle" | "submitting" | "complete"
+import { Button } from "@/components/ui/button"
+import type { OnboardingPlan, OnboardingStatus } from "@/lib/onboarding-plans"
 
 type PricingCardProps = {
   plan: OnboardingPlan
@@ -36,7 +35,7 @@ export function PricingCard({ plan, onSelect, status }: PricingCardProps) {
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
             <h2 className="font-heading text-xl font-semibold text-foreground">
-              Plano {plan.name}
+              {plan.name}
             </h2>
             {plan.badge && (
               <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
@@ -89,7 +88,7 @@ export function PricingCard({ plan, onSelect, status }: PricingCardProps) {
       <div
         className={cn(
           "mt-8 overflow-hidden rounded-4xl transition-colors duration-500",
-          status === "complete" ? "bg-green-500" : "gradient-bg"
+          status === "complete" ? "bg-green-500" : "gradient-bg",
         )}
       >
         <button
@@ -146,6 +145,48 @@ export function PricingCard({ plan, onSelect, status }: PricingCardProps) {
           </AnimatePresence>
         </button>
       </div>
+    </div>
+  )
+}
+
+export function PricingCardSkeleton() {
+  return (
+    <div className="flex flex-1 flex-col gap-6 p-6 lg:p-10">
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <div className="h-6 w-36 animate-pulse rounded-lg bg-muted" />
+          <div className="h-5 w-12 animate-pulse rounded-full bg-muted" />
+        </div>
+        <div className="h-4 w-full animate-pulse rounded bg-muted" />
+        <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
+      </div>
+      <div className="h-10 w-24 animate-pulse rounded-lg bg-muted" />
+      <div className="flex flex-col gap-3">
+        {(["85%", "70%", "80%", "65%"] as const).map((w) => (
+          <div key={w} className="flex items-center gap-3">
+            <div className="size-5 animate-pulse rounded-full bg-muted" />
+            <div
+              className="h-4 animate-pulse rounded bg-muted"
+              style={{ width: w }}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="mt-auto h-12 animate-pulse rounded-4xl bg-muted" />
+    </div>
+  )
+}
+
+export function PricingCardError({ onRetry }: { onRetry: () => void }) {
+  return (
+    <div className="flex flex-1 flex-col items-center justify-center gap-4 p-6 text-center lg:p-10">
+      <p className="text-sm text-muted-foreground">
+        Não foi possível carregar o plano.
+      </p>
+      <Button variant="outline" size="sm" onClick={onRetry}>
+        <RefreshCw size={14} aria-hidden="true" />
+        Tentar novamente
+      </Button>
     </div>
   )
 }
