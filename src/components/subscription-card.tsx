@@ -13,9 +13,9 @@ export function SubscriptionCard({ isCollapsedView }: SubscriptionCardProps) {
   const { user } = useAuth()
 
   return (
-    <>
+    <CollapsedTooltip collapsed={isCollapsedView} label="Seu plano">
       {user?.subscription ? (
-        <Card size="sm">
+        <Card size="sm" className={cn(isCollapsedView && "hidden")}>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-sm font-semibold">
               <RocketIcon size={18} className="text-primary" />
@@ -27,28 +27,26 @@ export function SubscriptionCard({ isCollapsedView }: SubscriptionCardProps) {
           </CardHeader>
         </Card>
       ) : (
-        <CollapsedTooltip collapsed={isCollapsedView} label="Fazer upgrade">
-          <Button
-            asChild
-            variant="outline"
-            aria-label="Fazer upgrade"
-            className={cn(
-              isCollapsedView
-                ? "size-10 p-0"
-                : "w-full justify-center gap-2 font-semibold"
-            )}
+        <Button
+          asChild
+          variant="outline"
+          aria-label="Fazer upgrade"
+          className={cn(
+            isCollapsedView
+              ? "size-10 p-0"
+              : "w-full justify-center gap-2 font-semibold"
+          )}
+        >
+          <a
+            href="https://www.anunciaai.com/#precos"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <a
-              href="https://www.anunciaai.com/#precos"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ZapIcon />
-              {!isCollapsedView && <span>Upgrade</span>}
-            </a>
-          </Button>
-        </CollapsedTooltip>
+            <ZapIcon />
+            {!isCollapsedView && <span>Upgrade</span>}
+          </a>
+        </Button>
       )}
-    </>
+    </CollapsedTooltip>
   )
 }
