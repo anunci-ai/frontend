@@ -32,7 +32,7 @@ import { fetchRecentListings } from "@/http/fetch-recent-listings"
 const SKELETON_COUNT = 8
 
 export function ListingsTable() {
-  const { page } = useSearch({ from: "/listings/" })
+  const { page } = useSearch({ from: "/_app/listings/" })
   const navigate = useNavigate()
   const [confirmingId, setConfirmingId] = useState<string | null>(null)
 
@@ -60,8 +60,12 @@ export function ListingsTable() {
             <TableRow>
               <TableHead className="w-16" />
               <TableHead>Descrição</TableHead>
-              <TableHead className="w-44">Marketplace</TableHead>
-              <TableHead className="w-44">Data de criação</TableHead>
+              <TableHead className="hidden w-44 md:table-cell">
+                Marketplace
+              </TableHead>
+              <TableHead className="hidden w-44 md:table-cell">
+                Data de criação
+              </TableHead>
               <TableHead className="w-12" />
             </TableRow>
           </TableHeader>
@@ -69,11 +73,21 @@ export function ListingsTable() {
             {isLoading ? (
               Array.from({ length: SKELETON_COUNT }).map((_, i) => (
                 <TableRow key={i}>
-                  {Array.from({ length: 5 }).map((_, j) => (
-                    <TableCell key={j}>
-                      <div className="h-5 animate-pulse rounded-md bg-muted" />
-                    </TableCell>
-                  ))}
+                  <TableCell>
+                    <div className="h-5 animate-pulse rounded-md bg-muted" />
+                  </TableCell>
+                  <TableCell>
+                    <div className="h-5 animate-pulse rounded-md bg-muted" />
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <div className="h-5 animate-pulse rounded-md bg-muted" />
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <div className="h-5 animate-pulse rounded-md bg-muted" />
+                  </TableCell>
+                  <TableCell>
+                    <div className="h-5 animate-pulse rounded-md bg-muted" />
+                  </TableCell>
                 </TableRow>
               ))
             ) : rows.length === 0 ? (
@@ -115,10 +129,10 @@ export function ListingsTable() {
                       />
                     )}
                   </TableCell>
-                  <TableCell className="max-w-xs font-medium">
-                    <span className="line-clamp-1">{l.inputDescription}</span>
+                  <TableCell className="max-w-0 font-medium md:max-w-xs">
+                    <span className="block truncate">{l.inputDescription}</span>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden md:table-cell">
                     {l.marketplace === "MERCADO_LIVRE" ? (
                       <div className="flex items-center gap-2">
                         <img src={mercadoLibreIcon} alt="" className="size-5" />
@@ -128,7 +142,7 @@ export function ListingsTable() {
                       <span>{l.marketplace}</span>
                     )}
                   </TableCell>
-                  <TableCell className="text-muted-foreground">
+                  <TableCell className="hidden text-muted-foreground md:table-cell">
                     {dayjs(l.createdAt).fromNow()}
                   </TableCell>
                   <TableCell>
