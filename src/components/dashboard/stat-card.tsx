@@ -11,9 +11,10 @@ interface StatCardProps {
   value: string | number
   icon: LucideIcon
   hint?: string
+  isLoading?: boolean
 }
 
-export function StatCard({ label, value, icon, hint }: StatCardProps) {
+export function StatCard({ label, value, icon, hint, isLoading }: StatCardProps) {
   const Icon = icon
   return (
     <Card>
@@ -26,7 +27,11 @@ export function StatCard({ label, value, icon, hint }: StatCardProps) {
         </div>
       </CardHeader>
       <CardContent className="pt-3">
-        <p className="text-3xl font-bold tracking-tight">{value}</p>
+        {isLoading ? (
+          <div className="h-9 w-20 animate-pulse rounded-md bg-muted" />
+        ) : (
+          <p className="text-3xl font-bold tracking-tight">{value}</p>
+        )}
         {hint && (
           <p className="mt-1 text-xs text-muted-foreground">{hint}</p>
         )}

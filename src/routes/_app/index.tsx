@@ -1,8 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createFileRoute } from "@tanstack/react-router"
-import { TrendingUp } from "lucide-react"
 import { PageHeader } from "@/components/page-header"
-import { StatCard } from "@/components/dashboard/stat-card"
+import { ListingsTotalCard } from "@/components/dashboard/listings-total-card"
 import { PlanCard } from "@/components/dashboard/plan-card"
 import { TokenUsageCard } from "@/components/dashboard/token-usage-card"
 import { ListingsChartCard } from "@/components/dashboard/listings-chart-card"
@@ -20,12 +19,7 @@ function Home() {
       />
 
       <section className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <StatCard
-          label="Anúncios gerados"
-          value={248}
-          icon={TrendingUp}
-          hint="Total acumulado"
-        />
+        <ListingsTotalCard />
         <PlanCard />
         <TokenUsageCard />
       </section>
