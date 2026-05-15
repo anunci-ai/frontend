@@ -13,15 +13,13 @@ import {
 } from "@/components/upload-image-form"
 import { ListingResult } from "@/components/listing-result"
 import { ListingStatusBadge } from "@/components/listing-status-badge"
-import {
-  StepperContent,
-  StepperPanel,
-} from "@/components/reui/stepper"
+import { StepperContent, StepperPanel } from "@/components/reui/stepper"
 import { generateText } from "@/http/generate-text"
 import { generateImages } from "@/http/generate-images"
 import { getGeneratedImages } from "@/http/get-generated-images"
 import { useListingStatus, isProcessing } from "@/hooks/use-listing-status"
 import { uploadImageWithProgress } from "@/http/upload-image-with-progress"
+import { TokenUsageCard } from "@/components/dashboard/token-usage-card"
 import { Button } from "@/components/ui/button"
 import type { ListingStatus } from "@/http/get-listing"
 
@@ -70,6 +68,16 @@ function CreateListingFlow() {
   const [uploadProgress, setUploadProgress] = useState(0)
   const [uploadErrorMsg, setUploadErrorMsg] = useState<string | undefined>()
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (
+      listing?.status === "TEXT_COMPLETED" ||
+      listing?.status === "IMAGE_COMPLETED" ||
+      listing?.status === "COMPLETED"
+    ) {
+      queryClient.invalidateQueries({ queryKey: ["sessions"] })
+    }
+  }, [listing?.status, queryClient])
 
   const view = deriveView(isLoading, listing?.status, uploadPhase, hasTimedOut)
 
@@ -195,6 +203,10 @@ function CreateListingFlow() {
         }
       />
 
+      <div className="w-full sm:max-w-sm">
+        <TokenUsageCard />
+      </div>
+
       <CreateFlowStepper
         value={activeStep}
         completedFor={(step) => {
@@ -221,8 +233,7 @@ function CreateListingFlow() {
                   imageUrl={imageUrl}
                   imageFile={imageFile}
                   onChange={(patch) => {
-                    if ("imageUrl" in patch)
-                      setImageUrl(patch.imageUrl ?? null)
+                    if ("imageUrl" in patch) setImageUrl(patch.imageUrl ?? null)
                     if ("imageFile" in patch)
                       setImageFile(patch.imageFile ?? null)
                   }}

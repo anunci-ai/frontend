@@ -1,13 +1,5 @@
 import { useState } from "react"
-import {
-  CheckCircle2,
-  Copy,
-  Download,
-  Eye,
-  ImageOff,
-  Sparkles,
-} from "lucide-react"
-import { toast } from "sonner"
+import { CheckCircle2, Copy, Sparkles } from "lucide-react"
 import { Link } from "@tanstack/react-router"
 import { Button } from "./ui/button"
 import {
@@ -26,72 +18,9 @@ import {
   DialogTitle,
 } from "./ui/dialog"
 import { cn } from "@/lib/utils"
+import { copyText } from "@/lib/listing-actions"
+import { ImageCell } from "@/components/image-cell"
 import type { ListingFormat } from "@/http/get-listing"
-
-function copyText(text: string) {
-  navigator.clipboard
-    .writeText(text)
-    .then(() => toast.success("Copiado para a área de transferência"))
-    .catch(() => toast.error("Não foi possível copiar"))
-}
-
-function downloadImage(url: string, index: number) {
-  const a = document.createElement("a")
-  a.href = url
-  a.download = `anuncio-variante-${index + 1}.jpg`
-  a.click()
-  toast.success("Download iniciado")
-}
-
-interface ImageCellProps {
-  url: string | null
-  label: string
-  onPreview: () => void
-}
-
-function ImageCell({ url, label, onPreview }: ImageCellProps) {
-  return (
-    <div className="group relative aspect-square overflow-hidden rounded-xl bg-muted ring-1 ring-border">
-      {url ? (
-        <img src={url} alt={label} className="size-full object-cover" />
-      ) : (
-        <div className="flex size-full flex-col items-center justify-center gap-2 text-muted-foreground">
-          <div className="h-5 w-24 animate-pulse rounded bg-muted-foreground/20" />
-          <ImageOff size={24} />
-        </div>
-      )}
-
-      {url && (
-        <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
-          <Button
-            type="button"
-            size="icon"
-            variant="secondary"
-            className="size-9"
-            aria-label="Visualizar imagem"
-            onClick={onPreview}
-          >
-            <Eye size={16} />
-          </Button>
-          <Button
-            type="button"
-            size="icon"
-            variant="secondary"
-            className="size-9"
-            aria-label="Baixar imagem"
-            onClick={() => downloadImage(url, 0)}
-          >
-            <Download size={16} />
-          </Button>
-        </div>
-      )}
-
-      <span className="absolute bottom-2 left-2 rounded-md bg-black/60 px-2 py-0.5 text-xs text-white">
-        {label}
-      </span>
-    </div>
-  )
-}
 
 interface ListingResultProps {
   listing: Pick<
@@ -156,8 +85,8 @@ export function ListingResult({
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <Card className="lg:col-span-1">
+      <div className="flex flex-col gap-6">
+        <Card>
           <CardHeader>
             <CardTitle>Imagens geradas</CardTitle>
             <CardDescription>
@@ -167,7 +96,7 @@ export function ListingResult({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               {imageSlots.map((img, i) => {
                 const item = img as { id?: string; url?: string }
                 return (
@@ -175,6 +104,7 @@ export function ListingResult({
                     key={item.id ?? i}
                     url={item.url ?? null}
                     label={`Variante ${i + 1}`}
+                    downloadFilename={`anuncio-variante-${i + 1}.jpg`}
                     onPreview={() => {
                       setPreviewIndex(i)
                       setPreviewOpen(true)
@@ -186,7 +116,7 @@ export function ListingResult({
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-2">
+        <Card>
           <CardHeader>
             <CardTitle>Conteúdo do anúncio</CardTitle>
             <CardDescription>

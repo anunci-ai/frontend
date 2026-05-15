@@ -5,6 +5,7 @@ import { MoreHorizontalIcon, Trash2Icon } from "lucide-react"
 import mercadoLibreIcon from "@/assets/mercado-libre.svg"
 import { dayjs } from "@/lib/dayjs"
 import { DeleteListingDialog } from "@/components/delete-listing-dialog"
+import { ListingDetailDialog } from "@/components/listing-detail-dialog"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -35,6 +36,7 @@ export function ListingsTable() {
   const { page } = useSearch({ from: "/_app/listings/" })
   const navigate = useNavigate()
   const [confirmingId, setConfirmingId] = useState<string | null>(null)
+  const [viewingId, setViewingId] = useState<string | null>(null)
 
   const { data, isLoading, isPlaceholderData } = useQuery({
     queryKey: ["listings", { page }],
@@ -114,7 +116,11 @@ export function ListingsTable() {
               </TableRow>
             ) : (
               rows.map((l) => (
-                <TableRow key={l.id}>
+                <TableRow
+                  key={l.id}
+                  className="cursor-pointer"
+                  onClick={() => setViewingId(l.id)}
+                >
                   <TableCell>
                     {l.originalImageUrl ? (
                       <img
@@ -145,7 +151,7 @@ export function ListingsTable() {
                   <TableCell className="hidden text-muted-foreground md:table-cell">
                     {dayjs(l.createdAt).fromNow()}
                   </TableCell>
-                  <TableCell>
+                  <TableCell onClick={(e) => e.stopPropagation()}>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" aria-label="Ações">
@@ -204,6 +210,12 @@ export function ListingsTable() {
         listing={confirming ?? null}
         onOpenChange={(open) => {
           if (!open) setConfirmingId(null)
+        }}
+      />
+      <ListingDetailDialog
+        listingId={viewingId}
+        onOpenChange={(open) => {
+          if (!open) setViewingId(null)
         }}
       />
     </>
