@@ -9,11 +9,12 @@ import { ModeToggle } from "./mode-toogle"
 import { ProfileButton } from "./profile-button"
 import { PanelLeftIcon, PlusIcon } from "lucide-react"
 import { SubscriptionCard } from "./subscription-card"
-import { Link } from "@tanstack/react-router"
+import { Link, useLocation } from "@tanstack/react-router"
 import { NAV_ITEMS } from "@/lib/nav-items"
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
+  const { pathname } = useLocation()
 
   return (
     <TooltipProvider>
@@ -83,20 +84,26 @@ export function Sidebar() {
           >
             {NAV_ITEMS.map((item) => {
               const Icon = item.icon
+              const isActive = item.activePattern.test(pathname)
               return (
                 <Button
                   key={item.label}
                   asChild
                   variant="ghost"
                   aria-label={item.label}
-                  className="w-full gap-2"
+                  className={cn(
+                    "w-full gap-2",
+                    isActive &&
+                      "bg-primary/10 text-primary hover:bg-primary/15 hover:text-primary"
+                  )}
                   size="lg"
                 >
                   <Link
                     to={item.to}
+                    aria-current={isActive ? "page" : undefined}
                     className="flex flex-row items-center justify-start gap-3"
                   >
-                    <Icon />
+                    <Icon strokeWidth={isActive ? 2.5 : undefined} />
                     <span>{item.label}</span>
                   </Link>
                 </Button>

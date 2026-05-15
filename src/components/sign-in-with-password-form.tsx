@@ -120,14 +120,19 @@ export function SignInWithPasswordForm({
                     type={showPassword ? "text" : "password"}
                     placeholder="Senha"
                     {...register("password")}
-                    className={cn("pr-10", errors.password && "border-destructive")}
+                    className={cn(
+                      "pr-10",
+                      errors.password && "border-destructive"
+                    )}
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="icon-sm"
                     onClick={() => setShowPassword((v) => !v)}
-                    aria-label={showPassword ? "Esconder senha" : "Mostrar senha"}
+                    aria-label={
+                      showPassword ? "Esconder senha" : "Mostrar senha"
+                    }
                     aria-pressed={showPassword}
                     className="absolute top-1/2 right-1 -translate-y-1/2 text-muted-foreground hover:bg-transparent"
                   >
