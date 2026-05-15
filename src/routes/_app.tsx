@@ -4,6 +4,7 @@ import { Sidebar } from "@/components/sidebar"
 import { BottomNavigation } from "@/components/bottom-navigation"
 import { FeedbackWidget } from "@/components/feedback-widget"
 import { requireAuth } from "@/auth/auth"
+import { OnboardingDialog } from "@/components/onboarding/onboarding-dialog"
 
 export const Route = createFileRoute("/_app")({
   beforeLoad: async () => {
@@ -27,6 +28,7 @@ function AppLayout() {
           <Outlet />
         </main>
       </div>
+      <OnboardingDialog />
     </div>
   )
 }

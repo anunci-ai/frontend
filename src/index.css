@@ -130,6 +130,10 @@
   }
 }
 
+button {
+  cursor: pointer;
+}
+
 .gradient-text {
   background: linear-gradient(
     135deg,
