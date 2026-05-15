@@ -13,10 +13,11 @@ import logo from "@/assets/logo.png"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
 import { useAuth } from "@/hooks/use-auth"
 import { saveToken } from "@/auth/auth"
 import { useNavigate } from "@tanstack/react-router"
-import { LoaderCircleIcon } from "lucide-react"
+import { LoaderCircleIcon, Eye, EyeOff } from "lucide-react"
 import { HTTPError } from "ky"
 import { toast } from "sonner"
 
@@ -38,6 +39,8 @@ export function SignInWithPasswordForm({
   } = useForm<SignInWithPasswordFormSchema>({
     resolver: zodResolver(signInWithPasswordFormSchema),
   })
+
+  const [showPassword, setShowPassword] = useState(false)
 
   const {
     signIn: { mutate, isPending },
@@ -111,13 +114,26 @@ export function SignInWithPasswordForm({
                     Esqueceu sua senha?
                   </a>
                 </div>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Senha"
-                  {...register("password")}
-                  className={cn(errors.password && "border-destructive")}
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Senha"
+                    {...register("password")}
+                    className={cn("pr-10", errors.password && "border-destructive")}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? "Esconder senha" : "Mostrar senha"}
+                    aria-pressed={showPassword}
+                    className="absolute top-1/2 right-1 -translate-y-1/2 text-muted-foreground hover:bg-transparent"
+                  >
+                    {showPassword ? <EyeOff /> : <Eye />}
+                  </Button>
+                </div>
                 {errors.password && (
                   <span className="text-sm font-semibold text-destructive">
                     {errors.password.message}
