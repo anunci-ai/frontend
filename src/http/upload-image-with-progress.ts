@@ -42,8 +42,13 @@ export function uploadImageWithProgress({
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
         onProgress?.(100)
+        const body = xhr.responseText
+        if (!body) {
+          resolve({ url: "" })
+          return
+        }
         try {
-          resolve(JSON.parse(xhr.responseText) as UploadImageResponse)
+          resolve(JSON.parse(body) as UploadImageResponse)
         } catch (e) {
           reject(e)
         }

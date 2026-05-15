@@ -1,3 +1,4 @@
+import { HTTPError } from "ky"
 import { api, ngrok } from "./api-client"
 
 export async function generateImages(listingId: string) {
@@ -5,5 +6,13 @@ export async function generateImages(listingId: string) {
 
   const apiClient = nodeEnv === "development" ? ngrok : api
 
-  await apiClient.patch(`listings/generate-images/${listingId}`).json<void>()
+  try {
+    await apiClient.patch(`listings/generate-images/${listingId}`)
+  } catch (error) {
+    if (error instanceof HTTPError && error.response.status === 404) {
+      return null
+    }
+
+    throw error
+  }
 }
