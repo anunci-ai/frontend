@@ -13,14 +13,8 @@ import {
 } from "@/components/onboarding/pricing-card"
 
 export function OnboardingDialog() {
-  const {
-    isOpen,
-    plan,
-    isPlansError,
-    refetchPlans,
-    subscribe,
-    status,
-  } = useOnboarding()
+  const { isOpen, plan, isPlansError, refetchPlans, subscribe, status } =
+    useOnboarding()
 
   return (
     <Dialog open={isOpen}>

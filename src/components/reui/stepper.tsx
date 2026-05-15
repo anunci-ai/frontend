@@ -1,9 +1,11 @@
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable react-hooks/refs */
 import {
   Children,
   createContext,
-  HTMLAttributes,
+  type HTMLAttributes,
   isValidElement,
-  ReactElement,
+  type ReactElement,
   useCallback,
   useContext,
   useEffect,
@@ -306,7 +308,7 @@ function StepperTrigger({
       data-state={state}
       data-loading={isLoading}
       className={cn(
-        "focus-visible:border-ring focus-visible:ring-ring/50 inline-flex cursor-pointer items-center outline-none focus-visible:z-10 focus-visible:ring-3 disabled:pointer-events-none disabled:opacity-60",
+        "inline-flex cursor-pointer items-center outline-none focus-visible:z-10 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-60",
         "gap-3 rounded-full",
         className
       )}
@@ -332,7 +334,7 @@ function StepperIndicator({
       data-slot="stepper-indicator"
       data-state={state}
       className={cn(
-        "border-background bg-accent text-accent-foreground data-[state=completed]:bg-primary data-[state=completed]:text-primary-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground relative flex size-6 shrink-0 items-center justify-center overflow-hidden",
+        "relative flex size-6 shrink-0 items-center justify-center overflow-hidden border-background bg-accent text-accent-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=completed]:bg-primary data-[state=completed]:text-primary-foreground",
         "rounded-full text-xs",
         className
       )}
@@ -361,7 +363,7 @@ function StepperSeparator({ className }: React.ComponentProps<"div">) {
       data-slot="stepper-separator"
       data-state={state}
       className={cn(
-        "bg-muted rounded-full group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5 m-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1",
+        "m-0.5 rounded-full bg-muted group-data-[orientation=horizontal]/stepper-nav:h-0.5 group-data-[orientation=horizontal]/stepper-nav:flex-1 group-data-[orientation=vertical]/stepper-nav:h-12 group-data-[orientation=vertical]/stepper-nav:w-0.5",
         className
       )}
     />
@@ -375,10 +377,7 @@ function StepperTitle({ children, className }: React.ComponentProps<"h3">) {
     <h3
       data-slot="stepper-title"
       data-state={state}
-      className={cn(
-        "text-sm leading-none font-medium",
-        className
-      )}
+      className={cn("text-sm leading-none font-medium", className)}
     >
       {children}
     </h3>
@@ -395,10 +394,7 @@ function StepperDescription({
     <div
       data-slot="stepper-description"
       data-state={state}
-      className={cn(
-        "text-muted-foreground text-sm",
-        className
-      )}
+      className={cn("text-sm text-muted-foreground", className)}
     >
       {children}
     </div>

@@ -15,7 +15,8 @@ const STATUS_CONFIG: Record<
   TEXT_PROCESSING: {
     label: "Gerando texto…",
     icon: Loader2,
-    className: "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800",
+    className:
+      "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800",
     spin: true,
   },
   TEXT_COMPLETED: {
@@ -27,7 +28,8 @@ const STATUS_CONFIG: Record<
   IMAGE_PROCESSING: {
     label: "Gerando imagens…",
     icon: Loader2,
-    className: "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800",
+    className:
+      "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800",
     spin: true,
   },
   IMAGE_COMPLETED: {
@@ -55,7 +57,10 @@ interface ListingStatusBadgeProps {
   className?: string
 }
 
-export function ListingStatusBadge({ status, className }: ListingStatusBadgeProps) {
+export function ListingStatusBadge({
+  status,
+  className,
+}: ListingStatusBadgeProps) {
   const config = STATUS_CONFIG[status]
   const Icon = config.icon
 

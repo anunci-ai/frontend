@@ -1,7 +1,8 @@
 import type { fetchPlans } from "@/http/fetch-plans"
 
-export type Plan =
-  NonNullable<Awaited<ReturnType<typeof fetchPlans>>>["plans"][number]
+export type Plan = NonNullable<
+  Awaited<ReturnType<typeof fetchPlans>>
+>["plans"][number]
 
 export type OnboardingPlan = {
   id: string

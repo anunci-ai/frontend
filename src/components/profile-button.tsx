@@ -55,7 +55,7 @@ export function ProfileButton({ isSidebarCollapsed }: ProfileButtonProps) {
             </Avatar>
             {!isSidebarCollapsed && user?.name && user?.email && (
               <div className="flex flex-col">
-                <span className="min-w-0 flex-1 truncate text-left text-sm text-foreground">
+                <span className="min-w-0 flex-1 truncate text-left text-sm font-semibold text-foreground">
                   {user.name}
                 </span>
                 <span className="min-w-0 flex-1 truncate text-left text-xs text-muted-foreground">

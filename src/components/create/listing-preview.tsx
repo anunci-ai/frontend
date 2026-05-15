@@ -38,7 +38,7 @@ export function ListingPreview({
           <img
             src={imageUrl}
             alt="Prévia do produto"
-            className="size-full object-contain p-4 animate-in fade-in duration-500"
+            className="size-full animate-in object-contain p-4 duration-500 fade-in"
           />
         ) : (
           <div className="flex size-full flex-col items-center justify-center gap-2 text-muted-foreground">
@@ -49,14 +49,18 @@ export function ListingPreview({
 
         {/* Mercado Livre badge */}
         {marketplace && (
-          <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-md bg-[#FFE600] px-2 py-1 text-xs font-semibold text-zinc-900 shadow-sm">
-            <img src={mercadoLibreIcon} alt="Mercado Livre" className="size-3.5" />
+          <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-md bg-[#FFE600] px-2 py-1 text-xs font-semibold text-zinc-900 shadow-sm">
+            <img
+              src={mercadoLibreIcon}
+              alt="Mercado Livre"
+              className="size-3.5"
+            />
             Mercado Livre
           </div>
         )}
 
         {/* Preview label */}
-        <div className="absolute right-3 top-3 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-medium text-white">
+        <div className="absolute top-3 right-3 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-medium text-white">
           Pré-visualização
         </div>
       </div>
@@ -66,15 +70,15 @@ export function ListingPreview({
         {/* Title */}
         <p
           className={cn(
-            "line-clamp-2 min-h-[2.5rem] text-sm font-medium leading-snug transition-all duration-300",
-            !hasContent && "italic text-muted-foreground"
+            "line-clamp-2 min-h-[2.5rem] text-sm leading-snug font-medium transition-all duration-300",
+            !hasContent && "text-muted-foreground italic"
           )}
         >
           {title || "Seu título aparecerá aqui"}
         </p>
 
         {/* Price */}
-        <p className="text-2xl font-semibold tabular-nums text-foreground">
+        <p className="text-2xl font-semibold text-foreground tabular-nums">
           {MOCK_PRICE}
         </p>
 
@@ -85,7 +89,9 @@ export function ListingPreview({
         <p
           className={cn(
             "line-clamp-3 min-h-[3rem] text-xs leading-relaxed transition-all duration-300",
-            hasContent ? "text-muted-foreground" : "italic text-muted-foreground/60"
+            hasContent
+              ? "text-muted-foreground"
+              : "text-muted-foreground/60 italic"
           )}
         >
           {description.trim() || "Sua descrição aparecerá aqui..."}

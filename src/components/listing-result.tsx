@@ -11,12 +11,7 @@ import {
   CardTitle,
 } from "./ui/card"
 import { Separator } from "./ui/separator"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "./ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog"
 import { cn } from "@/lib/utils"
 import { copyText } from "@/lib/listing-actions"
 import { ImageCell } from "@/components/image-cell"
@@ -69,7 +64,7 @@ export function ListingResult({
     .join("\n")
 
   return (
-    <div className="flex w-full flex-col gap-6 animate-in fade-in duration-300">
+    <div className="flex w-full animate-in flex-col gap-6 duration-300 fade-in">
       <div className="flex flex-col items-center gap-3 text-center">
         <div className="gradient-bg flex size-14 items-center justify-center rounded-full">
           <Sparkles size={24} className="text-white" />
@@ -138,11 +133,11 @@ export function ListingResult({
             {listing.generatedTitle && (
               <>
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                     Título
                   </span>
                   <div className="flex items-start justify-between gap-2">
-                    <p className="text-base font-semibold leading-snug">
+                    <p className="text-base leading-snug font-semibold">
                       {listing.generatedTitle}
                     </p>
                     <Button
@@ -165,7 +160,7 @@ export function ListingResult({
               <>
                 <div className="flex flex-col gap-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                       Descrição
                     </span>
                     <Button
@@ -191,7 +186,7 @@ export function ListingResult({
               <>
                 <div className="flex flex-col gap-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                       Meta descrição
                     </span>
                     <Button
@@ -218,7 +213,7 @@ export function ListingResult({
             {listing.generatedTags.length > 0 && (
               <>
                 <div className="flex flex-col gap-2">
-                  <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                     Tags
                   </span>
                   <div className="flex flex-wrap gap-1.5">
@@ -240,7 +235,7 @@ export function ListingResult({
             {listing.generatedSlug && (
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                     Slug
                   </span>
                   <Button

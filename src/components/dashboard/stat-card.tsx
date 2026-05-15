@@ -1,10 +1,5 @@
 import { type LucideIcon } from "lucide-react"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface StatCardProps {
   label: string
@@ -14,7 +9,13 @@ interface StatCardProps {
   isLoading?: boolean
 }
 
-export function StatCard({ label, value, icon, hint, isLoading }: StatCardProps) {
+export function StatCard({
+  label,
+  value,
+  icon,
+  hint,
+  isLoading,
+}: StatCardProps) {
   const Icon = icon
   return (
     <Card>
@@ -32,9 +33,7 @@ export function StatCard({ label, value, icon, hint, isLoading }: StatCardProps)
         ) : (
           <p className="text-3xl font-bold tracking-tight">{value}</p>
         )}
-        {hint && (
-          <p className="mt-1 text-xs text-muted-foreground">{hint}</p>
-        )}
+        {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
       </CardContent>
     </Card>
   )

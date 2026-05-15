@@ -88,7 +88,7 @@ export function PricingCard({ plan, onSelect, status }: PricingCardProps) {
       <div
         className={cn(
           "mt-8 overflow-hidden rounded-4xl transition-colors duration-500",
-          status === "complete" ? "bg-green-500" : "gradient-bg",
+          status === "complete" ? "bg-green-500" : "gradient-bg"
         )}
       >
         <button

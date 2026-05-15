@@ -1,5 +1,12 @@
 import { useRef, useState, useEffect } from "react"
-import { AlertCircle, ArrowLeft, ImageUp, Loader2, Trash2, Wand2 } from "lucide-react"
+import {
+  AlertCircle,
+  ArrowLeft,
+  ImageUp,
+  Loader2,
+  Trash2,
+  Wand2,
+} from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "./ui/button"
 import {
@@ -21,7 +28,10 @@ export type UploadPhase = "idle" | "uploading" | "generating-images" | "error"
 interface UploadImageFormProps {
   imageUrl: string | null
   imageFile: File | null
-  onChange: (patch: { imageUrl?: string | null; imageFile?: File | null }) => void
+  onChange: (patch: {
+    imageUrl?: string | null
+    imageFile?: File | null
+  }) => void
   onBack: () => void
   onGenerate: () => void
   phase: UploadPhase

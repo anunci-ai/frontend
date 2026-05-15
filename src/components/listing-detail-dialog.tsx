@@ -73,7 +73,7 @@ export function ListingDetailDialog({
     : ""
 
   const previewUrl = previewIsOriginal
-    ? listing?.originalImageUrl ?? null
+    ? (listing?.originalImageUrl ?? null)
     : (generatedImages[previewIndex]?.url ?? null)
 
   const previewLabel = previewIsOriginal
@@ -91,7 +91,9 @@ export function ListingDetailDialog({
             </div>
             {listing && (
               <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                <span className="max-w-xs truncate">{listing.inputDescription}</span>
+                <span className="max-w-xs truncate">
+                  {listing.inputDescription}
+                </span>
                 <span>·</span>
                 {listing.marketplace === "MERCADO_LIVRE" ? (
                   <span className="flex items-center gap-1">
@@ -110,7 +112,10 @@ export function ListingDetailDialog({
           <div className="flex-1 overflow-y-auto px-6 py-5">
             {isLoading ? (
               <div className="flex h-40 items-center justify-center">
-                <Loader2 size={28} className="animate-spin text-muted-foreground" />
+                <Loader2
+                  size={28}
+                  className="animate-spin text-muted-foreground"
+                />
               </div>
             ) : !listing ? (
               <p className="py-8 text-center text-sm text-muted-foreground">
@@ -220,11 +225,11 @@ export function ListingDetailDialog({
                       {listing.generatedTitle && (
                         <>
                           <div className="flex flex-col gap-1.5">
-                            <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                            <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                               Título
                             </span>
                             <div className="flex items-start justify-between gap-2">
-                              <p className="text-base font-semibold leading-snug">
+                              <p className="text-base leading-snug font-semibold">
                                 {listing.generatedTitle}
                               </p>
                               <Button
@@ -249,7 +254,7 @@ export function ListingDetailDialog({
                         <>
                           <div className="flex flex-col gap-1.5">
                             <div className="flex items-center justify-between">
-                              <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                              <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                 Descrição
                               </span>
                               <Button
@@ -277,7 +282,7 @@ export function ListingDetailDialog({
                         <>
                           <div className="flex flex-col gap-1.5">
                             <div className="flex items-center justify-between">
-                              <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                              <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                                 Meta descrição
                               </span>
                               <Button
@@ -304,7 +309,7 @@ export function ListingDetailDialog({
                       {listing.generatedTags.length > 0 && (
                         <>
                           <div className="flex flex-col gap-2">
-                            <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                            <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                               Tags
                             </span>
                             <div className="flex flex-wrap gap-1.5">
@@ -329,7 +334,7 @@ export function ListingDetailDialog({
                       {listing.generatedSlug && (
                         <div className="flex flex-col gap-1.5">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                            <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
                               Slug
                             </span>
                             <Button

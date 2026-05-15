@@ -18,8 +18,11 @@ export function useListingStatus(listingId: string) {
   // Stores which status triggered the timeout; hasTimedOut is derived by
   // comparing this against the current status — so it resets automatically
   // when the status changes without any synchronous setState in effects.
-  const [timedOutForStatus, setTimedOutForStatus] = useState<ListingStatus | null>(null)
-  const phaseRef = useRef<{ status: ListingStatus; startedAt: number } | null>(null)
+  const [timedOutForStatus, setTimedOutForStatus] =
+    useState<ListingStatus | null>(null)
+  const phaseRef = useRef<{ status: ListingStatus; startedAt: number } | null>(
+    null
+  )
 
   const query = useQuery({
     queryKey: ["listing", listingId],

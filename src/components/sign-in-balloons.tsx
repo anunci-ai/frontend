@@ -31,23 +31,26 @@ interface Balloon {
 }
 
 const BALLOONS: Balloon[] = [
-  { label: "Marketplace",   icon: StoreIcon,                top: 22, left: 26 },
-  { label: "IA",            icon: SparklesIcon,             top: 16, left: 42 },
-  { label: "Anúncios",      icon: MagicWand05Icon,          top: 20, left: 58 },
-  { label: "SEO",           icon: Chart03Icon,              top: 22, left: 74 },
-  { label: "Rápido",        icon: ZapIcon,                  top: 36, left: 20 },
-  { label: "Upload",        icon: UploadIcon,               top: 34, left: 80 },
-  { label: "Texto",         icon: QuillWrite01Icon,         top: 50, left: 18 },
-  { label: "Análise",       icon: AiViewIcon,               top: 50, left: 82 },
-  { label: "Conversão",     icon: Target01Icon,             top: 64, left: 20 },
-  { label: "Vendas",        icon: ShoppingBasketDone03Icon, top: 66, left: 80 },
-  { label: "Editor",        icon: DashboardSquareEditIcon,  top: 78, left: 30 },
-  { label: "Cópia",         icon: CopyIcon,                 top: 78, left: 70 },
+  { label: "Marketplace", icon: StoreIcon, top: 22, left: 26 },
+  { label: "IA", icon: SparklesIcon, top: 16, left: 42 },
+  { label: "Anúncios", icon: MagicWand05Icon, top: 20, left: 58 },
+  { label: "SEO", icon: Chart03Icon, top: 22, left: 74 },
+  { label: "Rápido", icon: ZapIcon, top: 36, left: 20 },
+  { label: "Upload", icon: UploadIcon, top: 34, left: 80 },
+  { label: "Texto", icon: QuillWrite01Icon, top: 50, left: 18 },
+  { label: "Análise", icon: AiViewIcon, top: 50, left: 82 },
+  { label: "Conversão", icon: Target01Icon, top: 64, left: 20 },
+  { label: "Vendas", icon: ShoppingBasketDone03Icon, top: 66, left: 80 },
+  { label: "Editor", icon: DashboardSquareEditIcon, top: 78, left: 30 },
+  { label: "Cópia", icon: CopyIcon, top: 78, left: 70 },
 ]
 
 export function SignInBalloons() {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 hidden md:block">
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 hidden md:block"
+    >
       <svg
         className="absolute inset-0 h-full w-full"
         preserveAspectRatio="none"
