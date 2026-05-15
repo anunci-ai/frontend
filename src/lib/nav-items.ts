@@ -26,7 +26,7 @@ export const NAV_ITEMS: NavItem[] = [
     activePattern: /^\/listings/,
   },
   {
-    to: "/",
+    to: "/settings",
     label: "Configurações",
     icon: SettingsIcon,
     activePattern: /^\/settings/,

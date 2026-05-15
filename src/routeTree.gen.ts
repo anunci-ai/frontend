@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as authSignInRouteRouteImport } from './routes/(auth)/sign-in/route'
+import { Route as AppSettingsIndexRouteImport } from './routes/_app/settings/index'
 import { Route as AppListingsIndexRouteImport } from './routes/_app/listings/index'
 import { Route as AppCreateIndexRouteImport } from './routes/_app/create/index'
 import { Route as AppCreateListingIdRouteImport } from './routes/_app/create/$listingId'
@@ -30,6 +31,11 @@ const authSignInRouteRoute = authSignInRouteRouteImport.update({
   id: '/(auth)/sign-in',
   path: '/sign-in',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppListingsIndexRoute = AppListingsIndexRouteImport.update({
   id: '/listings/',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/create/$listingId': typeof AppCreateListingIdRoute
   '/create/': typeof AppCreateIndexRoute
   '/listings/': typeof AppListingsIndexRoute
+  '/settings/': typeof AppSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/sign-in': typeof authSignInRouteRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/create/$listingId': typeof AppCreateListingIdRoute
   '/create': typeof AppCreateIndexRoute
   '/listings': typeof AppListingsIndexRoute
+  '/settings': typeof AppSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/_app/create/$listingId': typeof AppCreateListingIdRoute
   '/_app/create/': typeof AppCreateIndexRoute
   '/_app/listings/': typeof AppListingsIndexRoute
+  '/_app/settings/': typeof AppSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/create/$listingId'
     | '/create/'
     | '/listings/'
+    | '/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/sign-in'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
     | '/create/$listingId'
     | '/create'
     | '/listings'
+    | '/settings'
   id:
     | '__root__'
     | '/_app'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '/_app/create/$listingId'
     | '/_app/create/'
     | '/_app/listings/'
+    | '/_app/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -134,6 +146,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/sign-in'
       preLoaderRoute: typeof authSignInRouteRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_app/settings/': {
+      id: '/_app/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof AppSettingsIndexRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/listings/': {
       id: '/_app/listings/'
@@ -171,6 +190,7 @@ interface AppRouteChildren {
   AppCreateListingIdRoute: typeof AppCreateListingIdRoute
   AppCreateIndexRoute: typeof AppCreateIndexRoute
   AppListingsIndexRoute: typeof AppListingsIndexRoute
+  AppSettingsIndexRoute: typeof AppSettingsIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -178,6 +198,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCreateListingIdRoute: AppCreateListingIdRoute,
   AppCreateIndexRoute: AppCreateIndexRoute,
   AppListingsIndexRoute: AppListingsIndexRoute,
+  AppSettingsIndexRoute: AppSettingsIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
